@@ -1,0 +1,26 @@
+Standard PPS Calculation Components for 100Gbps Ethernet:
+
+Link rate: 100 Gbps = 100,000,000,000 bits per second
+
+Ethernet frame size: Variable, depending on payload/data size (including Ethernet header and FCS)
+Physical layer overhead: 20 bytes total (preamble 7 bytes + SFD 1 byte + Inter-frame gap 12 bytes)
+
+Total frame size on wire: Ethernet frame size + 20 bytes physical overhead
+Bits per packet: Total frame size × 8 bits/byte
+PPS: Line rate (bps) / Bits per packet
+
+Example standard PPS for typical Ethernet frame sizes on 100 Gbps:
+Ethernet Frame Size (Bytes)	Total Frame Size on Wire (Bytes)	Bits per Packet	PPS (Packets per Second)	PPS (Million)
+64	84 (64 + 20)	672	148,809,524	148.81
+128	148		1,184	84,459,459	84.46
+576	596		4,768	20,975,903	20.98
+1298	1318		10,544	9,483,812	9.48
+1518	1538		12,304	8,121,827	8.12
+4096	4116		32,928	3,037,380	3.04
+9018	9038		72,304	1,383,014	1.38
+Explanation:
+
+The Ethernet frame sizes here range from minimum ethernet frame (64 bytes) to jumbo frames (up to ~9000 bytes).
+Physical layer overhead (20 bytes) is added to account for preamble, SFD, and IFG.
+PPS decreases as frame size increases because each packet carries more bits, hence fewer packets are needed to saturate the 100 Gbps line.
+The calculation method follows IEEE 802.3 standards and is commonly used for realistic PPS measurement on 100GbE networks.
