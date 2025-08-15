@@ -1,0 +1,37 @@
+network:
+  version: 2
+  ethernets:
+    ens3f0np0:
+      addresses:
+      - "91.207.79.101/24"
+      nameservers:
+        addresses:
+        - 8.8.8.8
+        search:
+        - ylonen.org
+      routes:
+      - to: "default"
+        via: "91.207.79.1"
+      - to: 10.25.0.0/16
+        via: 10.25.1.2
+    black:
+      match:
+        macaddress: 10:70:fd:2f:b1:a0
+      set-name: black
+      mtu: 1500
+      addresses:
+        - 10.25.1.1/24
+      routes:
+        - to: 10.25.2.0/24
+          via: 10.25.1.2
+        - to: 10.24.3.0/24
+          via: 10.24.1.2
+    red:
+      match:
+        macaddress: 10:70:fd:2f:b1:a1
+      set-name: red
+      mtu: 1500
+      addresses:
+        - 10.25.0.2/24
+    enxbe3af2b6059f:
+      dhcp4: true

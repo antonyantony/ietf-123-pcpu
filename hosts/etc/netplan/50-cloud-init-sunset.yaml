@@ -1,0 +1,36 @@
+network:
+  version: 2
+  ethernets:
+    ens3:
+      addresses:
+      - "91.207.79.100/24"
+      nameservers:
+        addresses:
+        - 8.8.8.8
+        search:
+        - ylonen.org
+      routes:
+      - to: "default"
+        via: "91.207.79.1"
+    ens1f0np0:
+      set-name: redeast
+      match:
+        macaddress: 0c:42:a1:f7:bf:c6
+      addresses:
+        - 10.25.2.2/24
+    red:
+      set-name: redwest
+      match:
+        macaddress: 0c:42:a1:f7:bf:c7
+      mtu: 1500
+      addresses:
+        - 10.25.0.1/24
+      routes:
+        - to: 10.25.1.0/24
+          via: 10.25.0.2
+        #- to: 10.25.2.0/24
+        #  via: 10.25.0.2
+        #- to: 10.25.3.0/24
+        #  via: 10.25.0.2
+    enxbe3af2b6059f:
+      dhcp4: true

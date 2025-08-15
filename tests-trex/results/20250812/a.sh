@@ -1,0 +1,9 @@
+./u1.py --flows-start 1 --flows-end 16 --runs 5 --pps 129M --frame-size 64 --duration 30 --csvfile trex-flows-1-16-pps-129-frame-size-64
+./u1.py --flows-start 1 --flows-end 12 --runs 5 --pps 20M --frame-size 576 --duration 30 --csvfile trex-flows-1-16-pps-20m-frame-size-576
+./u1.py --flows-start 1 --flows-end 12 --runs 5 --pps 9.5M --frame-size 1280 --duration 30 --csvfile trex-flows-1-16-pps-9.5m-frame-size-1280
+./u1.py --flows-start 1 --flows-end 12 --runs 5 --pps 8.0M --frame-size 1518 --duration 30 --csvfile trex-flows-1-16-pps-8.0m-frame-size-1518
+./u1.py --flows-start 1 --flows-end 12 --runs 5 --pps 8.1M --frame-size 1518 --duration 30 --csvfile trex-flows-1-16-pps-8.1m-frame-size-1518
+./u1.py --flows-start 1 --flows-end 12 --runs 5 --pps 3M --frame-size 4096 --duration 30 --csvfile trex-flows-1-16-pps-3m-frame-size-4096
+./u1.py --flows-start 1 --flows-end 12 --runs 5 --pps 1.37M --frame-size 9018 --duration 30 --csvfile trex-flows-1-16-pps-1.37m-frame-size-9018
+./u1.py --flows-start 1 --flows-end 12 --runs 5 --pps 128M --frame-size 64 --duration 30 --csvfile trex-flows-1-16-pps-128-frame-size-64
+./u1.py --flows-start 1 --flows-end 12 --runs 5 --pps 78M --frame-size 128 --duration 30 --csvfile trex-flows-1-16-pps-78m-frame-size-128.json
