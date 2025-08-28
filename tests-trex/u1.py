@@ -245,7 +245,7 @@ Assumptions:
 
     Ethernet + physical overhead = 38 bytes total
     (Ethernet header 14 + FCS 4 + Preamble + SFD 8 + Inter-frame gap (IFG) 12)
-    PPS calculated by dividing link rate by total bits per packet 
+    PPS calculated by dividing link rate by total bits per packet
     (IP packet size + 38 overhead bytes) × 8 (bits/byte)
 
     """
@@ -289,7 +289,7 @@ def run_test_frame_sizes(args, pps):
 
             print(f"Setting flows {st.flows}/{args.flows_end} pps {st.pps:.2f}/{pps:.2f} per flow throughput {args.throughput} and frame-size {st.frame_size} runs {args.runs} duration {args.duration} sec")
             test_results = run_tests(args, st)
-            all_results_frame_size.append(test_results)
+            all_results_frame_size.extend(test_results)
 
             write_json(args.csvfile, all_results_frame_size)
 
@@ -305,7 +305,7 @@ def write_json(csv_filename, all_results):
 
     # Dump JSON results to file
     with open(json_filename, 'w') as f:
-        print(f"\nAll runs aggregated result as JSON: f{json_filename}")
+        print(f"\nAll runs aggregated result as JSON: {json_filename}")
         json.dump(all_results, f, indent=2)
 
 class Def:
@@ -315,8 +315,8 @@ class Def:
 class Def_v6:
   frame_sizes = [1440]
   pps = ["10K"]
-  src_ip = "2001:db8:0:1::254" 
-  dst_ip = "2001:db8:0:2::254" 
+  src_ip = "2001:db8:0:1::254"
+  dst_ip = "2001:db8:0:2::254"
 
 if __name__ == "__main__":
 
@@ -360,5 +360,5 @@ if __name__ == "__main__":
         for ppss in args.pps: #loop over --pps array
             pps = parse_rate_value(ppss, "pps")
             test_results = run_test_frame_sizes(args, pps)
-            all_results.append(test_results)
+            all_results.extend(test_results)
             write_json(args.csvfile, all_results)
