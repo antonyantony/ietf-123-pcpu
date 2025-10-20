@@ -225,9 +225,9 @@ enabled, multiple flows</figcaption>
 txt</a>. When system boots <a href="filt:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-default.txt">20251020-gro-black-default.txt</a></p>
 <h1 id="xfrm-per-cpu-forwarding-using-xdp">XFRM Per-CPU Forwarding Using
 XDP</h1>
-<p>Initial tests using [[<a href="https://github.com/antonyantony/xdp-tools">https://github.com/antonyantony/xdp-tools</a>](<a href="https://github.com/antonyantony/xdp-tools">https://github.com/antonyantony/xdp-tools</a>)[xdp-tools]]
-in QEMU show positive results. However, when attempting on hardware with
-Mellanox CX5 NIC, we encounter a kernel Oops (crash).</p>
+<p>Initial tests using <a href="https://github.com/antonyantony/xdp-tools">xdp-tools</a> with
+IPsec/XFRM pCPU support. In QEMU this works. However, when running on
+hardware with Mellanox CX5 NIC, we encounter a kernel Oops (crash).</p>
 <pre id="oops-dmesg __xdp_build_skb_from_frame" class="example"><code>[43920.895685] [      C0] adding new tunnel tuple
 [43920.895687] [      C0] tunnel 192.1.2.45 -&gt; 192.1.2.23 l3proto=2 l4proto=50 spi:c00da7c8 iifidx=6
 [55769.370122] [  T58734] ------------[ cut here ]------------
