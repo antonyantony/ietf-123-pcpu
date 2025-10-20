@@ -188,7 +188,7 @@ XDP</a></li>
 <h1 id="introduction">Introduction</h1>
 <p>This is a short summary of testing done jointly with Pablo Neira
 Ayuso, Steffen Klassert, and Antony Antony. We are adding Linux kernel
-support for forwarding data path using Netfilter [[<a href="https://docs.kernel.org/networking/nf_flowtable.html">https://docs.kernel.org/networking/nf_flowtable.html</a>](<a href="https://docs.kernel.org/networking/nf_flowtable.html">https://docs.kernel.org/networking/nf_flowtable.html</a>)[flowtable]]
+support for forwarding data path using Netfilter <a href="https://docs.kernel.org/networking/nf_flowtable.html">flowtable</a>
 for bulk forwarding, to improve forwarding data path performance,
 especially IPsec forwarding as IPsec gateway.</p>
 <h1 id="flowtable-bulking-testing-results">Flowtable Bulking Testing
@@ -221,6 +221,8 @@ flows</figcaption>
 <figcaption>RX Gbps using single SA no bulk forwarding ESP Offload
 enabled, multiple flows</figcaption>
 </figure>
+<p>Is the Hardware GRO enabled? After enabling <a href="tests-trex/results/20251016-ports/gro-default/20251020-gro-black-enabled.txt">20251020-gro-black-enabled.
+txt</a>. When system boots <a href="filt:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-default.txt">20251020-gro-black-default.txt</a></p>
 <h1 id="xfrm-per-cpu-forwarding-using-xdp">XFRM Per-CPU Forwarding Using
 XDP</h1>
 <p>Initial tests using [[<a href="https://github.com/antonyantony/xdp-tools">https://github.com/antonyantony/xdp-tools</a>](<a href="https://github.com/antonyantony/xdp-tools">https://github.com/antonyantony/xdp-tools</a>)[xdp-tools]]

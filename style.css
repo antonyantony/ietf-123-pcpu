@@ -1,2 +1,33 @@
-body { max-width: 720px; margin: 0 auto; }
-.content { max-width: 800px; }
+body, .container, .content {
+    /* Use full browser width, but add comfortable padding */
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 auto;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+img {
+    max-width: 800px;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Optional: Make tables readable and scrollable if too wide */
+table {
+    width: 100%;
+    overflow-x: auto;
+    display: block;
+}
+
+/* Optional: Styling for code blocks */
+pre, code {
+    background: #f8f8f8;
+    font-size: 1em;
+    padding: 4px;
+    border-radius: 4px;
+}
+
