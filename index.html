@@ -181,6 +181,7 @@ Results</a>
 <li><a href="#forwarding-tests-ipsec-multi-flow" id="toc-forwarding-tests-ipsec-multi-flow">Forwarding Tests (IPsec,
 Multi-Flow)</a></li>
 </ul></li>
+<li><a href="#packets-taking-slow-path." id="toc-packets-taking-slow-path.">Packets taking slow path.</a></li>
 <li><a href="#xfrm-per-cpu-forwarding-using-xdp" id="toc-xfrm-per-cpu-forwarding-using-xdp">XFRM Per-CPU Forwarding Using
 XDP</a></li>
 </ul>
@@ -223,6 +224,25 @@ enabled, multiple flows</figcaption>
 </figure>
 <p>Is the Hardware GRO enabled? After enabling <a href="tests-trex/results/20251016-ports/gro-default/20251020-gro-black-enabled.txt">20251020-gro-black-enabled.
 txt</a>. When system boots <a href="filt:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-default.txt">20251020-gro-black-default.txt</a></p>
+<h1 id="packets-taking-slow-path.">Packets taking slow path.</h1>
+<p>When flowtable with 5000 src port about 32K Packets take the slow
+path. That seems to be time necessary to create offload data path.</p>
+<pre id="Flow offload" class="example"><code>
+nft list ruleset
+table inet x {
+    flowtable f {
+        hook early_ingress priority filter
+        devices = { &quot;black&quot;, &quot;red&quot; }
+    }
+
+    chain forward {
+        type filter hook forward priority filter; policy accept;
+        ip protocol { tcp, udp } flow add @f log prefix &quot;OFFLOADED: &quot; counter packets 16384 bytes 1867776
+        counter packets 32768 bytes 3735552
+    }
+}
+
+</code></pre>
 <h1 id="xfrm-per-cpu-forwarding-using-xdp">XFRM Per-CPU Forwarding Using
 XDP</h1>
 <p>Initial tests using <a href="https://github.com/antonyantony/xdp-tools">xdp-tools</a> with

@@ -208,7 +208,6 @@ def plot_multiple(files, x_key: Optional[str], y_key: Optional[str], title: str,
           label.set_rotation(30)
           label.set_ha("right")
 
-        print(f"{x_vals}")
         print(f"{ticks}")
 
     ax.legend(loc="best")
