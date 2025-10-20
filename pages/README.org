@@ -6,7 +6,7 @@
 This is a short summary of testing done jointly with Pablo Neira Ayuso,
 Steffen Klassert, and Antony Antony. We are adding Linux kernel support
 for forwarding data path using Netfilter
-[[https://docs.kernel.org/networking/nf_flowtable.html](https://docs.kernel.org/networking/nf_flowtable.html)[flowtable]] 
+[[https://docs.kernel.org/networking/nf_flowtable.html][flowtable]] 
 for bulk forwarding, to improve forwarding data path performance, especially IPsec forwarding as IPsec gateway.
 
 * Flowtable Bulking Testing Results
@@ -33,10 +33,13 @@ using a flow table rule.
 #+caption: RX Gbps using single SA no bulk forwarding ESP Offload enabled, multiple flows
 [[file:tests-trex/results/20251016-ports/dst-ports-gbps.png]]
 
+Is the Hardware GRO  enabled? After enabling 
+[[file:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-enabled.txt][20251020-gro-black-enabled. txt]]. When system boots
+[[filt:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-default.txt][20251020-gro-black-default.txt]]
+
 * XFRM Per-CPU Forwarding Using XDP
 
-Initial tests using [[https://github.com/antonyantony/xdp-tools](https://github.com/antonyantony/xdp-tools)[xdp-tools]] in QEMU show positive
-results. However, when attempting on hardware with Mellanox CX5 NIC,
+Initial tests using [[https://github.com/antonyantony/xdp-tools][xdp-tools]] with IPsec/XFRM pCPU support. In QEMU this works. However, when running on hardware with Mellanox CX5 NIC,
 we encounter a kernel Oops (crash).
 
 #+CAPTION: Kernel oops (dmesg excerpt) xdp-tool
