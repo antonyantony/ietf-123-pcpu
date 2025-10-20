@@ -1,26 +1,78 @@
-#+TITLE: Linux kernel bulk forwarding path
+#+TITLE: Linux kernel flowtable bulk forwarding path
 #+AUTHOR: Antony Antony
 #+DATE: October 10, 2025
 
 * Introduction
-This is short summary of testing of joint work with Pablo Neira Ayuso, 
-Steffen Klassert, and Antony Antony.  Adding linux kernel support for forwarding
-data path path using netfiter
-[[https://docs.kernel.org/networking/nf_flowtable.html][flowtable]] support to forward
+This is a short summary of testing done jointly with Pablo Neira Ayuso,
+Steffen Klassert, and Antony Antony. We are adding Linux kernel support
+for forwarding data path using Netfilter
+[[https://docs.kernel.org/networking/nf_flowtable.html](https://docs.kernel.org/networking/nf_flowtable.html)[flowtable]] 
+for bulk forwarding, to improve forwarding data path performance, especially IPsec forwarding as IPsec gateway.
 
+* Flowtable Bulking Testing Results
 
-* Flotable Bulking testing results
+All tests here are using smaller ethernet frame sizes, i.e 128 bytes due limitiation of the system.  This is to show the scaling properties and later to be tested with 1518 byte frames.
 
-** Forwarding tests
+** Forwarding Tests (no IPsec)
+Test without IPsec. Frame size: 128 bytes.
 
 #+caption: RX throughput (Gbps)
-[[file:results/20251017-bulking-no-xfrm/rx-gbps.png]]
+[[file:tests-trex/results/20251017-bulking-no-xfrm/rx-gbps.png]]
 
 #+caption: RX PPS (Mpps)
-[[file:results/20251017-bulking-no-xfrm/rx-mpps.png]]
+[[file:tests-trex/results/20251017-bulking-no-xfrm/rx-mpps.png]]
 
-#+caption: RX Gbps
-[[file:results/20251017-ports/dst-ports-gbps.png]]
+** Forwarding Tests (IPsec, Multi-Flow)
+Forwarding multiple flows by changing UDP source port over an IPsec tunnel.
+IPsec uses a pair of SAs (no pCPU). All flows are forwarded to one CPU
+using a flow table rule.
 
+#+caption: RX Gbps using single SA and bulk forwarding, multiple flows
+[[file:tests-trex/results/20251017-ports/dst-ports-gbps.png]]
 
+#+caption: RX Gbps using single SA no bulk forwarding ESP Offload enabled, multiple flows
+[[file:tests-trex/results/20251016-ports/dst-ports-gbps.png]]
 
+* XFRM Per-CPU Forwarding Using XDP
+
+Initial tests using [[https://github.com/antonyantony/xdp-tools](https://github.com/antonyantony/xdp-tools)[xdp-tools]] in QEMU show positive
+results. However, when attempting on hardware with Mellanox CX5 NIC,
+we encounter a kernel Oops (crash).
+
+#+CAPTION: Kernel oops (dmesg excerpt) xdp-tool
+#+NAME: oops-dmesg __xdp_build_skb_from_frame
+#+BEGIN_EXAMPLE
+[43920.895685] [      C0] adding new tunnel tuple
+[43920.895687] [      C0] tunnel 192.1.2.45 -> 192.1.2.23 l3proto=2 l4proto=50 spi:c00da7c8 iifidx=6
+[55769.370122] [  T58734] ------------[ cut here ]------------
+[55769.370129] [  T58734] kernel BUG at ./include/linux/skbuff.h:2785!
+[55769.370159] [  T58734] Oops: invalid opcode: 0000 [#1] SMP
+[55769.370174] [  T58734] CPU: 15 UID: 0 PID: 58734 Comm: cpumap/15/map:7 Kdump: loaded Not tainted 6.17.0-rc2+ #34 PREEMPT(voluntary)
+[55769.370194] [  T58734] Hardware name: Supermicro AS -1115CS-TNR-EU/H13SSW, BIOS 3.0 09/23/2024
+[55769.370203] [  T58734] RIP: 0010:eth_type_trans+0xe8/0x150
+[55769.370216] [  T58734] Code: 80 00 00 00 eb ba 8b 47 70 2b 47 74 48 8b 97 d0 00 00 00 83 f8 01 7e 1b  48 85 d2 74 06 66 83 3a ff 74 09 b8 00 04 00 00 eb 9e <0f> 0b b8 00 01 00 00 eb 95 48 85 ff 74 eb 48 8d  5c 24 06 31 f6 b9
+[55769.370236] [  T58734] RSP: 0018:ffa000000c9c7d58 EFLAGS: 00010283
+[55769.370245] [  T58734] RAX: 00000000000000a8 RBX: ff1100011bb88d00 RCX: ff11000207335100
+[55769.370254] [  T58734] RDX: 0000000000000100 RSI: ff11000125200000 RDI: ff1100011bb88d00
+[55769.370262] [  T58734] RBP: ff11000207335000 R08: ff11000207335000 R09: 0000000000000000
+[55769.370271] [  T58734] R10: 0000000000000000 R11: 0000000000000001 R12: ff11000207335200
+[55769.370279] [  T58734] R13: ff11000125200000 R14: 0000000000000001 R15: 0000000000000100
+[55769.370287] [  T58734] FS:  0000000000000000(0000) GS:ff11002f06570000(0000) knlGS:0000000000000000
+[55769.370296] [  T58734] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[55769.370303] [  T58734] CR2: 00007fff613ba498 CR3: 0000000181ed6006 CR4: 0000000000f71ef0
+[55769.370312] [  T58734] PKRU: 55555554
+[55769.370317] [  T58734] Call Trace:
+[55769.370323] [  T58734]  <TASK>
+[55769.370329] [  T58734]  __xdp_build_skb_from_frame+0xa7/0x150
+[55769.370340] [  T58734]  cpu_map_kthread_run+0x28b/0x9b0
+[55769.370350] [  T58734]  ? sched_clock+0xc/0x20
+[55769.370359] [  T58734]  ? cpu_map_bpf_prog_run+0x150/0x150
+[55769.370366] [  T58734]  kthread+0xf5/0x200
+[55769.370373] [  T58734]  ? kthreads_online_cpu+0x110/0x110
+[55769.370379] [  T58734]  ? kthreads_online_cpu+0x110/0x110
+[55769.370385] [  T58734]  ret_from_fork+0xb2/0x180
+[55769.370392] [  T58734]  ? kthreads_online_cpu+0x110/0x110
+[55769.370399] [  T58734]  ret_from_fork_asm+0x11/0x20
+[55769.370407] [  T58734]  </TASK>
+[55769.370411] [  T58734] Modules linked in:
+#+END_EXAMPLE
