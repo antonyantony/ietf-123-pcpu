@@ -37,6 +37,32 @@ Is the Hardware GRO  enabled? After enabling
 [[file:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-enabled.txt][20251020-gro-black-enabled. txt]]. When system boots
 [[filt:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-default.txt][20251020-gro-black-default.txt]]
 
+
+* Packets taking slow path.
+
+When flowtable with 5000  src port about  32K Packets take the slow path. That seems to be time necessary to create offload data path. 
+
+#+CAPTION: Time to build slow path 5000 flows
+#+NAME: Flow offload
+#+BEGIN_EXAMPLE
+
+nft list ruleset
+table inet x {
+	flowtable f {
+		hook early_ingress priority filter
+		devices = { "black", "red" }
+	}
+
+	chain forward {
+		type filter hook forward priority filter; policy accept;
+		ip protocol { tcp, udp } flow add @f log prefix "OFFLOADED: " counter packets 16384 bytes 1867776
+		counter packets 32768 bytes 3735552
+	}
+}
+
+#+END_EXAMPLE
+
+
 * XFRM Per-CPU Forwarding Using XDP
 
 Initial tests using [[https://github.com/antonyantony/xdp-tools][xdp-tools]] with IPsec/XFRM pCPU support. In QEMU this works. However, when running on hardware with Mellanox CX5 NIC,

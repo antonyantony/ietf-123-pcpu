@@ -1,8 +1,8 @@
 .PHONY: publish
 publish:
 	pandoc pages/README.org --from=org --to=html5 \
-    		--standalone --toc --self-contained \
+    		--embed-resources --standalone --toc \
 		--resource-path=".:pages:results" \
-		--css=style.css \
+		--css=publish/style.css \
 		-o publish/index.html
 
