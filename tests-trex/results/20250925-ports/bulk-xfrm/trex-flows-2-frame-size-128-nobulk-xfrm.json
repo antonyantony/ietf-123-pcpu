@@ -1,0 +1,3667 @@
+[
+  {
+    "tx_pps": 2351201.0,
+    "tx_bps": 2482868480.0,
+    "tx_throughput_gibps": 2.6627077162265778,
+    "tx_errors": 0,
+    "tx_opackets": 70495976,
+    "tx_obytes": 9305468832,
+    "tx_ipackets": 0,
+    "tx_ibytes": 0,
+    "rx_pps": 2330696.0,
+    "rx_bps": 2461215744.0,
+    "rx_throughput_gibps": 2.63948655128479,
+    "rx_ipackets": 69749763,
+    "rx_ibytes": 9206968512,
+    "rx_opackets": 0,
+    "rx_obytes": 0,
+    "rx_drops": 0,
+    "l_pkts": 746213,
+    "l_bytes": 98500320,
+    "l_pkts_percent": 1.0585185741665595,
+    "src_ips": 1,
+    "dst_ips": 1,
+    "src_ports": 1,
+    "dst_ports": 2,
+    "elapsed_runtime": 30.015358448028564,
+    "duration": 30,
+    "runtime_deviation": 0,
+    "cpu_load_total": 10.735025405883789,
+    "cpu_load_avg": 10.735025405883789,
+    "num_cpus": 16,
+    "frame_size": 128,
+    "tx_pps_req": 2350000,
+    "tx_pps_per_flow": 2350000.0,
+    "tx_flow_throughput": null,
+    "flows": 1,
+    "flows_start": 1,
+    "flows_end": 1,
+    "run": 1,
+    "runs": 5,
+    "stats": {
+      "stats_start": {
+        "sunset": {
+          "redwest": [
+            {
+              "ifname": "redwest",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 8879780
+              }
+            },
+            {
+              "ifindex": 5,
+              "ifname": "redwest",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c7",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22866,
+                  "packets": 323,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx0c42a1f7bfc7"
+              ]
+            }
+          ],
+          "redeast": [
+            {
+              "ifname": "redeast",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 4,
+              "ifname": "redeast",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9238,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c6",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22256,
+                  "packets": 316,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx0c42a1f7bfc6"
+              ]
+            }
+          ]
+        },
+        "west": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 171557,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "PROMISC",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a1",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3457667323734,
+                  "packets": 16004607014,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 746155473,
+                  "over_errors": 0,
+                  "multicast": 146
+                },
+                "tx": {
+                  "bytes": 10176,
+                  "packets": 144,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd2fb1a1"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 560
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a0",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 144991,
+                  "packets": 1294,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 3869927162536,
+                  "packets": 14877357934,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd2fb1a0"
+              ]
+            }
+          ]
+        },
+        "east": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:59",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3900,
+                  "packets": 62,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 62
+                },
+                "tx": {
+                  "bytes": 1208794709932,
+                  "packets": 6408944056,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd232b59"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:58",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 2978432007661,
+                  "packets": 13619227793,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 203971395,
+                  "over_errors": 0,
+                  "multicast": 1
+                },
+                "tx": {
+                  "bytes": 138078,
+                  "packets": 1320,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd232b58"
+              ]
+            }
+          ]
+        }
+      },
+      "stats_end": {
+        "sunset": {
+          "redwest": [
+            {
+              "ifname": "redwest",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 8879780
+              }
+            },
+            {
+              "ifindex": 5,
+              "ifname": "redwest",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c7",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22866,
+                  "packets": 323,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx0c42a1f7bfc7"
+              ]
+            }
+          ],
+          "redeast": [
+            {
+              "ifname": "redeast",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 4,
+              "ifname": "redeast",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9238,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c6",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22256,
+                  "packets": 316,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx0c42a1f7bfc6"
+              ]
+            }
+          ]
+        },
+        "west": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 171557,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "PROMISC",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a1",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3466614735062,
+                  "packets": 16074508665,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 746749798,
+                  "over_errors": 0,
+                  "multicast": 146
+                },
+                "tx": {
+                  "bytes": 10176,
+                  "packets": 144,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd2fb1a1"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 560
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a0",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 145423,
+                  "packets": 1298,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 3882649263138,
+                  "packets": 14947259587,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd2fb1a0"
+              ]
+            }
+          ]
+        },
+        "east": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:59",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3900,
+                  "packets": 62,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 62
+                },
+                "tx": {
+                  "bytes": 1217724561760,
+                  "packets": 6478708525,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd232b59"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:58",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 2991149298185,
+                  "packets": 13689103017,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 203997824,
+                  "over_errors": 0,
+                  "multicast": 1
+                },
+                "tx": {
+                  "bytes": 138510,
+                  "packets": 1324,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd232b58"
+              ]
+            }
+          ]
+        }
+      },
+      "stats_diff": {
+        "sunset": {},
+        "west": {
+          "red": [
+            {
+              "stats64": {
+                "rx": {
+                  "missed": 594325
+                }
+              }
+            }
+          ]
+        },
+        "east": {
+          "black": [
+            {
+              "stats64": {
+                "rx": {
+                  "missed": 26429
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "tx_pps": 2351958.0,
+    "tx_bps": 2483666432.0,
+    "tx_throughput_gibps": 2.6635636687278748,
+    "tx_errors": 0,
+    "tx_opackets": 70495976,
+    "tx_obytes": 9305468832,
+    "tx_ipackets": 0,
+    "tx_ibytes": 0,
+    "rx_pps": 2308960.0,
+    "rx_bps": 2438265088.0,
+    "rx_throughput_gibps": 2.614873170852661,
+    "rx_ipackets": 69546989,
+    "rx_ibytes": 9180202548,
+    "rx_opackets": 0,
+    "rx_obytes": 0,
+    "rx_drops": 0,
+    "l_pkts": 948987,
+    "l_bytes": 125266284,
+    "l_pkts_percent": 1.346157687071387,
+    "src_ips": 1,
+    "dst_ips": 1,
+    "src_ports": 1,
+    "dst_ports": 2,
+    "elapsed_runtime": 30.028751611709595,
+    "duration": 30,
+    "runtime_deviation": 0,
+    "cpu_load_total": 10.853304862976074,
+    "cpu_load_avg": 10.853304862976074,
+    "num_cpus": 16,
+    "frame_size": 128,
+    "tx_pps_req": 2350000,
+    "tx_pps_per_flow": 2350000.0,
+    "tx_flow_throughput": null,
+    "flows": 1,
+    "flows_start": 1,
+    "flows_end": 1,
+    "run": 2,
+    "runs": 5,
+    "stats": {
+      "stats_start": {
+        "sunset": {
+          "redwest": [
+            {
+              "ifname": "redwest",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 8879780
+              }
+            },
+            {
+              "ifindex": 5,
+              "ifname": "redwest",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c7",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22866,
+                  "packets": 323,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx0c42a1f7bfc7"
+              ]
+            }
+          ],
+          "redeast": [
+            {
+              "ifname": "redeast",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 4,
+              "ifname": "redeast",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9238,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c6",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22256,
+                  "packets": 316,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx0c42a1f7bfc6"
+              ]
+            }
+          ]
+        },
+        "west": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 171557,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "PROMISC",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a1",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3466614735574,
+                  "packets": 16074508669,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 746749798,
+                  "over_errors": 0,
+                  "multicast": 146
+                },
+                "tx": {
+                  "bytes": 10176,
+                  "packets": 144,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd2fb1a1"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 560
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a0",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 145423,
+                  "packets": 1298,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 3882649263866,
+                  "packets": 14947259591,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd2fb1a0"
+              ]
+            }
+          ]
+        },
+        "east": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:59",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3900,
+                  "packets": 62,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 62
+                },
+                "tx": {
+                  "bytes": 1217724562272,
+                  "packets": 6478708529,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd232b59"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:58",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 2991149298913,
+                  "packets": 13689103021,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 203997824,
+                  "over_errors": 0,
+                  "multicast": 1
+                },
+                "tx": {
+                  "bytes": 138510,
+                  "packets": 1324,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd232b58"
+              ]
+            }
+          ]
+        }
+      },
+      "stats_end": {
+        "sunset": {
+          "redwest": [
+            {
+              "ifname": "redwest",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 8879780
+              }
+            },
+            {
+              "ifindex": 5,
+              "ifname": "redwest",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c7",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22866,
+                  "packets": 323,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx0c42a1f7bfc7"
+              ]
+            }
+          ],
+          "redeast": [
+            {
+              "ifname": "redeast",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 4,
+              "ifname": "redeast",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9238,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c6",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22256,
+                  "packets": 316,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx0c42a1f7bfc6"
+              ]
+            }
+          ]
+        },
+        "west": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 171557,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "PROMISC",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a1",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3475516750166,
+                  "packets": 16144055658,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 747698785,
+                  "over_errors": 0,
+                  "multicast": 146
+                },
+                "tx": {
+                  "bytes": 10176,
+                  "packets": 144,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd2fb1a1"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 560
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a0",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 145423,
+                  "packets": 1298,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 3895306815864,
+                  "packets": 15016806580,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd2fb1a0"
+              ]
+            }
+          ]
+        },
+        "east": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:59",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3900,
+                  "packets": 62,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 62
+                },
+                "tx": {
+                  "bytes": 1226626576864,
+                  "packets": 6548255518,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd232b59"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:58",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3003806850911,
+                  "packets": 13758650010,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 203997824,
+                  "over_errors": 0,
+                  "multicast": 1
+                },
+                "tx": {
+                  "bytes": 138510,
+                  "packets": 1324,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd232b58"
+              ]
+            }
+          ]
+        }
+      },
+      "stats_diff": {
+        "sunset": {},
+        "west": {
+          "red": [
+            {
+              "stats64": {
+                "rx": {
+                  "missed": 948987
+                }
+              }
+            }
+          ]
+        },
+        "east": {}
+      }
+    }
+  },
+  {
+    "tx_pps": 2344100.0,
+    "tx_bps": 2475369728.0,
+    "tx_throughput_gibps": 2.6546658277511597,
+    "tx_errors": 0,
+    "tx_opackets": 70495976,
+    "tx_obytes": 9305468832,
+    "tx_ipackets": 0,
+    "tx_ibytes": 0,
+    "rx_pps": 2312332.5,
+    "rx_bps": 2441821696.0,
+    "rx_throughput_gibps": 2.6186880618333817,
+    "rx_ipackets": 69489785,
+    "rx_ibytes": 9172651620,
+    "rx_opackets": 0,
+    "rx_obytes": 0,
+    "rx_drops": 0,
+    "l_pkts": 1006191,
+    "l_bytes": 132817212,
+    "l_pkts_percent": 1.4273027442020236,
+    "src_ips": 1,
+    "dst_ips": 1,
+    "src_ports": 1,
+    "dst_ports": 2,
+    "elapsed_runtime": 30.025044679641724,
+    "duration": 30,
+    "runtime_deviation": 0,
+    "cpu_load_total": 10.899353981018066,
+    "cpu_load_avg": 10.899353981018066,
+    "num_cpus": 16,
+    "frame_size": 128,
+    "tx_pps_req": 2350000,
+    "tx_pps_per_flow": 2350000.0,
+    "tx_flow_throughput": null,
+    "flows": 1,
+    "flows_start": 1,
+    "flows_end": 1,
+    "run": 3,
+    "runs": 5,
+    "stats": {
+      "stats_start": {
+        "sunset": {
+          "redwest": [
+            {
+              "ifname": "redwest",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 8879780
+              }
+            },
+            {
+              "ifindex": 5,
+              "ifname": "redwest",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c7",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22866,
+                  "packets": 323,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx0c42a1f7bfc7"
+              ]
+            }
+          ],
+          "redeast": [
+            {
+              "ifname": "redeast",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 4,
+              "ifname": "redeast",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9238,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c6",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22256,
+                  "packets": 316,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx0c42a1f7bfc6"
+              ]
+            }
+          ]
+        },
+        "west": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 171557,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "PROMISC",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a1",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3475516750678,
+                  "packets": 16144055662,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 747698785,
+                  "over_errors": 0,
+                  "multicast": 146
+                },
+                "tx": {
+                  "bytes": 10176,
+                  "packets": 144,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd2fb1a1"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 560
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a0",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 145423,
+                  "packets": 1298,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 3895306816592,
+                  "packets": 15016806584,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd2fb1a0"
+              ]
+            }
+          ]
+        },
+        "east": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:59",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3900,
+                  "packets": 62,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 62
+                },
+                "tx": {
+                  "bytes": 1226626577376,
+                  "packets": 6548255522,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd232b59"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:58",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3003806851639,
+                  "packets": 13758650014,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 203997824,
+                  "over_errors": 0,
+                  "multicast": 1
+                },
+                "tx": {
+                  "bytes": 138510,
+                  "packets": 1324,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd232b58"
+              ]
+            }
+          ]
+        }
+      },
+      "stats_end": {
+        "sunset": {
+          "redwest": [
+            {
+              "ifname": "redwest",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 8879780
+              }
+            },
+            {
+              "ifindex": 5,
+              "ifname": "redwest",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c7",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22866,
+                  "packets": 323,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx0c42a1f7bfc7"
+              ]
+            }
+          ],
+          "redeast": [
+            {
+              "ifname": "redeast",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 4,
+              "ifname": "redeast",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9238,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c6",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22256,
+                  "packets": 316,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx0c42a1f7bfc6"
+              ]
+            }
+          ]
+        },
+        "west": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 171557,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "PROMISC",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a1",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3484411443158,
+                  "packets": 16213545447,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 748704976,
+                  "over_errors": 0,
+                  "multicast": 146
+                },
+                "tx": {
+                  "bytes": 10176,
+                  "packets": 144,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd2fb1a1"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 560
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a0",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 145423,
+                  "packets": 1298,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 3907953957462,
+                  "packets": 15086296369,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd2fb1a0"
+              ]
+            }
+          ]
+        },
+        "east": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:59",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3900,
+                  "packets": 62,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 62
+                },
+                "tx": {
+                  "bytes": 1235521269856,
+                  "packets": 6617745307,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd232b59"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:58",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3016453992509,
+                  "packets": 13828139799,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 203997824,
+                  "over_errors": 0,
+                  "multicast": 1
+                },
+                "tx": {
+                  "bytes": 138510,
+                  "packets": 1324,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd232b58"
+              ]
+            }
+          ]
+        }
+      },
+      "stats_diff": {
+        "sunset": {},
+        "west": {
+          "red": [
+            {
+              "stats64": {
+                "rx": {
+                  "missed": 1006191
+                }
+              }
+            }
+          ]
+        },
+        "east": {}
+      }
+    }
+  },
+  {
+    "tx_pps": 2351319.0,
+    "tx_bps": 2482992640.0,
+    "tx_throughput_gibps": 2.6628409326076508,
+    "tx_errors": 0,
+    "tx_opackets": 70495976,
+    "tx_obytes": 9305468832,
+    "tx_ipackets": 0,
+    "tx_ibytes": 0,
+    "rx_pps": 2325595.5,
+    "rx_bps": 2455828736.0,
+    "rx_throughput_gibps": 2.6337094753980637,
+    "rx_ipackets": 69715496,
+    "rx_ibytes": 9202445472,
+    "rx_opackets": 0,
+    "rx_obytes": 0,
+    "rx_drops": 0,
+    "l_pkts": 780480,
+    "l_bytes": 103023360,
+    "l_pkts_percent": 1.1071270223991225,
+    "src_ips": 1,
+    "dst_ips": 1,
+    "src_ports": 1,
+    "dst_ports": 2,
+    "elapsed_runtime": 30.0269033908844,
+    "duration": 30,
+    "runtime_deviation": 0,
+    "cpu_load_total": 10.573698043823242,
+    "cpu_load_avg": 10.573698043823242,
+    "num_cpus": 16,
+    "frame_size": 128,
+    "tx_pps_req": 2350000,
+    "tx_pps_per_flow": 2350000.0,
+    "tx_flow_throughput": null,
+    "flows": 1,
+    "flows_start": 1,
+    "flows_end": 1,
+    "run": 4,
+    "runs": 5,
+    "stats": {
+      "stats_start": {
+        "sunset": {
+          "redwest": [
+            {
+              "ifname": "redwest",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 8879780
+              }
+            },
+            {
+              "ifindex": 5,
+              "ifname": "redwest",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c7",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22866,
+                  "packets": 323,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx0c42a1f7bfc7"
+              ]
+            }
+          ],
+          "redeast": [
+            {
+              "ifname": "redeast",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 4,
+              "ifname": "redeast",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9238,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c6",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22256,
+                  "packets": 316,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx0c42a1f7bfc6"
+              ]
+            }
+          ]
+        },
+        "west": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 171557,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "PROMISC",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a1",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3484411443670,
+                  "packets": 16213545451,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 748704976,
+                  "over_errors": 0,
+                  "multicast": 146
+                },
+                "tx": {
+                  "bytes": 10176,
+                  "packets": 144,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd2fb1a1"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 560
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a0",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 145423,
+                  "packets": 1298,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 3907953958190,
+                  "packets": 15086296373,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd2fb1a0"
+              ]
+            }
+          ]
+        },
+        "east": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:59",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3900,
+                  "packets": 62,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 62
+                },
+                "tx": {
+                  "bytes": 1235521270368,
+                  "packets": 6617745311,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd232b59"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:58",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3016453993237,
+                  "packets": 13828139803,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 203997824,
+                  "over_errors": 0,
+                  "multicast": 1
+                },
+                "tx": {
+                  "bytes": 138510,
+                  "packets": 1324,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd232b58"
+              ]
+            }
+          ]
+        }
+      },
+      "stats_end": {
+        "sunset": {
+          "redwest": [
+            {
+              "ifname": "redwest",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 8879780
+              }
+            },
+            {
+              "ifindex": 5,
+              "ifname": "redwest",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c7",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22866,
+                  "packets": 323,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx0c42a1f7bfc7"
+              ]
+            }
+          ],
+          "redeast": [
+            {
+              "ifname": "redeast",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 4,
+              "ifname": "redeast",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9238,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c6",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22256,
+                  "packets": 316,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx0c42a1f7bfc6"
+              ]
+            }
+          ]
+        },
+        "west": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 171557,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "PROMISC",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a1",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3493335027158,
+                  "packets": 16283260947,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 749485456,
+                  "over_errors": 0,
+                  "multicast": 146
+                },
+                "tx": {
+                  "bytes": 10176,
+                  "packets": 144,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd2fb1a1"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 560
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a0",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 145423,
+                  "packets": 1298,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 3920642178462,
+                  "packets": 15156011869,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd2fb1a0"
+              ]
+            }
+          ]
+        },
+        "east": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:59",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3900,
+                  "packets": 62,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 62
+                },
+                "tx": {
+                  "bytes": 1244444853856,
+                  "packets": 6687460807,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd232b59"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:58",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3029142213509,
+                  "packets": 13897855299,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 203997824,
+                  "over_errors": 0,
+                  "multicast": 1
+                },
+                "tx": {
+                  "bytes": 138510,
+                  "packets": 1324,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd232b58"
+              ]
+            }
+          ]
+        }
+      },
+      "stats_diff": {
+        "sunset": {},
+        "west": {
+          "red": [
+            {
+              "stats64": {
+                "rx": {
+                  "missed": 780480
+                }
+              }
+            }
+          ]
+        },
+        "east": {}
+      }
+    }
+  },
+  {
+    "tx_pps": 2344249.5,
+    "tx_bps": 2475524864.0,
+    "tx_throughput_gibps": 2.65483258664608,
+    "tx_errors": 0,
+    "tx_opackets": 70495976,
+    "tx_obytes": 9305468832,
+    "tx_ipackets": 0,
+    "tx_ibytes": 0,
+    "rx_pps": 2326419.25,
+    "rx_bps": 2456696832.0,
+    "rx_throughput_gibps": 2.6346407011151314,
+    "rx_ipackets": 70081347,
+    "rx_ibytes": 9250737804,
+    "rx_opackets": 0,
+    "rx_obytes": 0,
+    "rx_drops": 0,
+    "l_pkts": 414629,
+    "l_bytes": 54731028,
+    "l_pkts_percent": 0.5881598121288512,
+    "src_ips": 1,
+    "dst_ips": 1,
+    "src_ports": 1,
+    "dst_ports": 2,
+    "elapsed_runtime": 30.022176504135132,
+    "duration": 30,
+    "runtime_deviation": 0,
+    "cpu_load_total": 10.863424301147461,
+    "cpu_load_avg": 10.863424301147461,
+    "num_cpus": 16,
+    "frame_size": 128,
+    "tx_pps_req": 2350000,
+    "tx_pps_per_flow": 2350000.0,
+    "tx_flow_throughput": null,
+    "flows": 1,
+    "flows_start": 1,
+    "flows_end": 1,
+    "run": 5,
+    "runs": 5,
+    "stats": {
+      "stats_start": {
+        "sunset": {
+          "redwest": [
+            {
+              "ifname": "redwest",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 8879780
+              }
+            },
+            {
+              "ifindex": 5,
+              "ifname": "redwest",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c7",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22866,
+                  "packets": 323,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx0c42a1f7bfc7"
+              ]
+            }
+          ],
+          "redeast": [
+            {
+              "ifname": "redeast",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 4,
+              "ifname": "redeast",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9238,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c6",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22256,
+                  "packets": 316,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx0c42a1f7bfc6"
+              ]
+            }
+          ]
+        },
+        "west": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 171557,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "PROMISC",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a1",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3493335027670,
+                  "packets": 16283260951,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 749485456,
+                  "over_errors": 0,
+                  "multicast": 146
+                },
+                "tx": {
+                  "bytes": 10176,
+                  "packets": 144,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd2fb1a1"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 560
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a0",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 145423,
+                  "packets": 1298,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 3920642179190,
+                  "packets": 15156011873,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd2fb1a0"
+              ]
+            }
+          ]
+        },
+        "east": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:59",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3900,
+                  "packets": 62,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 62
+                },
+                "tx": {
+                  "bytes": 1244444854368,
+                  "packets": 6687460811,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd232b59"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:58",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3029142214237,
+                  "packets": 13897855303,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 203997824,
+                  "over_errors": 0,
+                  "multicast": 1
+                },
+                "tx": {
+                  "bytes": 138510,
+                  "packets": 1324,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd232b58"
+              ]
+            }
+          ]
+        }
+      },
+      "stats_end": {
+        "sunset": {
+          "redwest": [
+            {
+              "ifname": "redwest",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 8879780
+              }
+            },
+            {
+              "ifindex": 5,
+              "ifname": "redwest",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c7",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22866,
+                  "packets": 323,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx0c42a1f7bfc7"
+              ]
+            }
+          ],
+          "redeast": [
+            {
+              "ifname": "redeast",
+              "autonegotiate": false,
+              "rx": false,
+              "tx": false,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 4,
+              "ifname": "redeast",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9238,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "0c:42:a1:f7:bf:c6",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 0,
+                  "packets": 0,
+                  "errors": 0,
+                  "dropped": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 22256,
+                  "packets": 316,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx0c42a1f7bfc6"
+              ]
+            }
+          ]
+        },
+        "west": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 171557,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "PROMISC",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a1",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3502305440086,
+                  "packets": 16353342298,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 749900085,
+                  "over_errors": 0,
+                  "multicast": 146
+                },
+                "tx": {
+                  "bytes": 10176,
+                  "packets": 144,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd2fb1a1"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 560
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:2f:b1:a0",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 145423,
+                  "packets": 1298,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 0
+                },
+                "tx": {
+                  "bytes": 3933396984344,
+                  "packets": 15226093220,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd2fb1a0"
+              ]
+            }
+          ]
+        },
+        "east": {
+          "red": [
+            {
+              "ifname": "red",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 7,
+              "ifname": "red",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:59",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3900,
+                  "packets": 62,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 0,
+                  "over_errors": 0,
+                  "multicast": 62
+                },
+                "tx": {
+                  "bytes": 1253415266784,
+                  "packets": 6757542158,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f1np1",
+                "enx1070fd232b59"
+              ]
+            }
+          ],
+          "black": [
+            {
+              "ifname": "black",
+              "autonegotiate": false,
+              "rx": true,
+              "tx": true,
+              "statistics": {
+                "tx_pause_frames": 0,
+                "rx_pause_frames": 0
+              }
+            },
+            {
+              "ifindex": 6,
+              "ifname": "black",
+              "flags": [
+                "BROADCAST",
+                "MULTICAST",
+                "UP",
+                "LOWER_UP"
+              ],
+              "mtu": 9000,
+              "qdisc": "mq",
+              "operstate": "UP",
+              "linkmode": "DEFAULT",
+              "group": "default",
+              "txqlen": 1000,
+              "link_type": "ether",
+              "address": "10:70:fd:23:2b:58",
+              "broadcast": "ff:ff:ff:ff:ff:ff",
+              "stats64": {
+                "rx": {
+                  "bytes": 3041897019391,
+                  "packets": 13967936650,
+                  "errors": 0,
+                  "dropped": 0,
+                  "missed": 203997824,
+                  "over_errors": 0,
+                  "multicast": 1
+                },
+                "tx": {
+                  "bytes": 138510,
+                  "packets": 1324,
+                  "errors": 0,
+                  "dropped": 0,
+                  "carrier_errors": 0,
+                  "collisions": 0
+                }
+              },
+              "vfinfo_list": [],
+              "altnames": [
+                "enp1s0f0np0",
+                "enx1070fd232b58"
+              ]
+            }
+          ]
+        }
+      },
+      "stats_diff": {
+        "sunset": {},
+        "west": {
+          "red": [
+            {
+              "stats64": {
+                "rx": {
+                  "missed": 414629
+                }
+              }
+            }
+          ]
+        },
+        "east": {}
+      }
+    }
+  }
+]
