@@ -1,0 +1,26 @@
+#+TITLE: Linux kernel bulk forwarding path
+#+AUTHOR: Antony Antony
+#+DATE: October 10, 2025
+
+* Introduction
+This is short summary of testing of joint work with Pablo Neira Ayuso, 
+Steffen Klassert, and Antony Antony.  Adding linux kernel support for forwarding
+data path path using netfiter
+[[https://docs.kernel.org/networking/nf_flowtable.html][flowtable]] support to forward
+
+
+* Flotable Bulking testing results
+
+** Forwarding tests
+
+#+caption: RX throughput (Gbps)
+[[file:results/20251017-bulking-no-xfrm/rx-gbps.png]]
+
+#+caption: RX PPS (Mpps)
+[[file:results/20251017-bulking-no-xfrm/rx-mpps.png]]
+
+#+caption: RX Gbps
+[[file:results/20251017-ports/dst-ports-gbps.png]]
+
+
+
