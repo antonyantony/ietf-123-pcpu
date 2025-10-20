@@ -15,4 +15,5 @@ ethtool -N red flow-type udp4  src-port 4512 loc 12 action 12
 ethtool -N red flow-type udp4  src-port 4513 loc 13 action 13
 ethtool -N red flow-type udp4  src-port 4514 loc 14 action 14
 ethtool -N red flow-type udp4  src-port 4515 loc 15 action 15
+ethtool -N red flow-type udp4  dst-port 1 loc 15 action 1
 # ethtool -n red
