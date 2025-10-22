@@ -22,6 +22,15 @@ Test without IPsec. Frame size: 128 bytes.
 #+caption: RX PPS (Mpps)
 [[file:tests-trex/results/20251017-bulking-no-xfrm/rx-mpps.png]]
 
+A second run of the same above.
+
+#+caption: RX throughput (Gbps)
+[[file:tests-trex/results/20251020-bulking-no-xfrm/rx-gbps.png]]
+
+#+caption: RX PPS (Mpps)
+[[file:tests-trex/results/20251020-bulking-no-xfrm/rx-pps.png]]
+
+
 ** Forwarding Tests (IPsec, Multi-Flow)
 Forwarding multiple flows by changing UDP source port over an IPsec tunnel.
 IPsec uses a pair of SAs (no pCPU). All flows are forwarded to one CPU
