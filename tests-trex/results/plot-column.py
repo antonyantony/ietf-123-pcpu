@@ -4,12 +4,9 @@ A modular rewrite of the original pps-plot.py that plots FOUR lines
 on a single chart: the original file + three additional variants.
 
 Defaults (edit the list or pass --files):
-- trex-flows-1-15-frame-size-128-16m.json.json
-- trex-flows-1-15-frame-size-128-16m-no-bulk.json.json
-- trex-flows-1-15-frame-size-128-16m-west-bulk.json.json
-- trex-flows-1-15-frame-size-128-16m-east-bulk.json.json
 """
 
+import sys
 import argparse
 import json
 from pathlib import Path
@@ -160,6 +157,9 @@ def plot_multiple(files, x_key: Optional[str], y_key: Optional[str], title: str,
         # Plot this file as its own line (no merging between files)
         ax.plot(grp[cur_x], y_plot, marker="o", linewidth=2, label=label_from_filename(Path(fpath)))
 
+        print(f"{cur_x}")
+        print(f"{y_plot}")
+
         # Track global x-range for vertical guidelines
         try:
             x_vals = pd.to_numeric(grp[cur_x], errors="coerce")
@@ -218,17 +218,10 @@ def plot_multiple(files, x_key: Optional[str], y_key: Optional[str], title: str,
 
 def parse_args():
     p = argparse.ArgumentParser(description="Plot 4 TRex results on one chart.")
-    p.add_argument(
-        "--files", nargs="+", default=[
-            "trex-flows-1-15-frame-size-128-16m.json.json",
-            "trex-flows-1-15-frame-size-128-16m-no-bulk.json.json",
-            "trex-flows-1-15-frame-size-128-16m-west-bulk.json.json",
-            "trex-flows-1-15-frame-size-128-16m-east-bulk.json.json",
-        ],
-        help="Input JSON files. Default includes base + no-bulk + west-bulk + east-bulk."
+    p.add_argument( "--files", action="append", default=[],
+        help="Input JSON files. Can be given multiple times or with multiple names per flag.",
     )
-    p.add_argument( "--x-log-2", action="store_true", help="Use log₂ scale for the X axis (default: linear)."
-)
+    p.add_argument("--x-log-2", default=False,  action='store_true', help="X axis is log2() (default:False).")
     p.add_argument("--x-key", default="flows", help="X column (default: 'flows').")
     p.add_argument("--y-key", default="rx_pps", help="Y column (default: 'rx_pps').")
     p.add_argument("--x-label", default=None, help="Custom label for X-axis. Defaults to --x-key.")
