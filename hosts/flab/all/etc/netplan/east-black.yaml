@@ -1,0 +1,17 @@
+network:
+  version: 2
+  renderer: networkd
+
+  ethernets:
+    black:
+      match:
+        macaddress: 24:8a:07:5b:14:e0
+      set-name: black
+      dhcp4: no
+      addresses:
+        - 192.1.2.23/24
+      routes:
+        - to: 192.0.1.0/24
+          via: 192.1.2.45
+          from: 192.0.2.254
+          mtu: 1380

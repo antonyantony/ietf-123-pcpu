@@ -1,0 +1,22 @@
+network:
+  version: 2
+  renderer: networkd
+
+  ethernets:
+    redwest:
+      match:
+        macaddress: b8:59:9f:3a:b7:0e
+      set-name: redwest
+      dhcp4: no
+      addresses:
+        - 192.0.1.250/24
+      routes:
+        - to: 192.0.2.0/24
+          via: 192.0.1.254
+          from: 192.0.1.252
+          mtu: 1380
+
+        - to: 192.1.2.0/24
+          via: 192.0.1.254
+          from: 192.0.1.252
+          mtu: 1380

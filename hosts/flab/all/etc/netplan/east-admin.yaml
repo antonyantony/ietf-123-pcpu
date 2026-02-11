@@ -1,0 +1,11 @@
+network:
+  version: 2
+  ethernets:
+    enp6s18:
+      match:
+        macaddress: bc:24:11:10:3d:bc
+      addresses:
+        - 10.44.0.102/24
+      routes:
+        - to: default
+          via : 10.44.0.1

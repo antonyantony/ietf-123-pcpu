@@ -1,0 +1,12 @@
+network:
+  version: 2
+  renderer: networkd
+
+  ethernets:
+    redeast:
+      match:
+        macaddress: b8:59:9f:3a:b7:0f
+      set-name: redeast
+      dhcp4: no
+      addresses:
+        - 192.0.3.250/24 # this intentially wrong

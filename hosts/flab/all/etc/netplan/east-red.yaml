@@ -1,0 +1,12 @@
+network:
+  version: 2
+  renderer: networkd
+
+  ethernets:
+    red:
+      match:
+        macaddress: 24:8a:07:5b:14:e1
+      set-name: red
+      dhcp4: no
+      addresses:
+        - 192.0.2.254/24
