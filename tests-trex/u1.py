@@ -273,6 +273,7 @@ async def run_tests (args, st):
         print(f" run {run_id}/{args.runs} ",  end="")
         if not args.no_priming:
             run_priming_delay(args, st)
+
         if args.interface_stats:
             diag = InterfaceDiagnostics()
             await diag.collect_data(phase="start")
@@ -296,7 +297,6 @@ async def run_tests (args, st):
             "flows_end": args.flows_end,
             "run": run_id,
             "runs": args.runs,
-            "stats" : stats
             })
         all_runs_results.append(run_result)
 
@@ -426,12 +426,12 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--server", type=str, default="127.0.0.1")
-    parser.add_argument("--dst-ip", type=str, default="192.0.2.253")
+    parser.add_argument("--dst-ip", type=str, default="192.0.2.250")
     parser.add_argument("--dst-ips", type=int, default=1)
     parser.add_argument("--src-ips", type=int, default=1)
     parser.add_argument("--src-ip", type=str, default="192.0.1.1")
-    parser.add_argument("--dst-mac", type=str, default="10:70:fd:2f:b1:a1")
-    parser.add_argument("--src-mac", type=str, default="1c:42:a1:f7:bf:c7")
+    parser.add_argument("--dst-mac", type=str, default="24:8a:07:5b:15:0c")
+    parser.add_argument("--src-mac", type=str, default="b8:59:9f:3a:b7:0e")
     parser.add_argument("--src-port", type=int, default=4501)
     parser.add_argument("--src-ports", type=int, default=1)
     parser.add_argument("--dst-ports", type=int, default=1)
