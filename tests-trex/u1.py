@@ -129,36 +129,34 @@ def run_priming(args, st, n=1, delay_ms=100):
         c.reset(ports=[0, 1])
         c.clear_stats()
 
+        ports = [0, 1] if args.bidir else [0]
+
         for flow_id in range(st.flows):
             src_port = args.src_port + flow_id
-            pkt = create_pkt_udp(args.src_mac, args.dst_mac, args.src_ip,
+            # Forward: port 0 → port 1
+            fwd_pkt = create_pkt_udp(args.src_mac, args.dst_mac, args.src_ip,
                              args.dst_ip, st.frame_size, src_port,
                              args.dst_port)
+            fwd_stream = STLStream(packet=fwd_pkt, mode=STLTXSingleBurst(total_pkts=n))
+            c.add_streams([fwd_stream], ports=[0])
 
-
-            stream = STLStream(packet=pkt, mode=STLTXSingleBurst(total_pkts=n))
-
-            # Add only current stream
-            c.add_streams([stream], ports=[0])
+            if args.bidir:
+                # Reverse: port 1 → port 0 (swapped MAC, IP, ports)
+                rev_pkt = create_pkt_udp(args.dst_mac, args.src_mac, args.dst_ip,
+                                 args.src_ip, st.frame_size, args.dst_port,
+                                 src_port)
+                rev_stream = STLStream(packet=rev_pkt, mode=STLTXSingleBurst(total_pkts=n))
+                c.add_streams([rev_stream], ports=[1])
 
             # Send first stream twice, others once; Jacob Two Two to get Fallback SA and per cpu SA
             send_times = 2 if flow_id == 0 else 1
 
             for i in range(send_times):
-                c.start(ports=[0], mult="1")  # start sending current stream
-                c.wait_on_traffic(ports=[0])  # wait until done
-                # Wait delay between streams in seconds
+                c.start(ports=ports, mult="1")
+                c.wait_on_traffic(ports=ports)
                 time.sleep(delay_ms / 1000.0)
 
-
-                # Optionally clear stats after each send if desired
-                # c.clear_stats()
-
-            # Remove current stream before next loop iteration
-            # Reset the client to clear streams on port 0
             c.reset(ports=[0, 1])
-
-            # Wait delay between streams in seconds
             time.sleep(delay_ms / 1000.0)
 
     finally:
@@ -176,23 +174,34 @@ def run_test(args, st):
         c.reset(ports=[0, 1])
         c.clear_stats()
 
-        streams = []
+        ports = [0, 1] if args.bidir else [0]
+        fwd_streams = []
+        rev_streams = []
 
         for flow_id in range(st.flows):
             src_port = args.src_port + flow_id
-            pkt = create_pkt_udp_with_vm(args.src_mac, args.dst_mac,
+            # Forward: port 0 → port 1
+            fwd_pkt = create_pkt_udp_with_vm(args.src_mac, args.dst_mac,
                        args.src_ip, args.src_ips,
                        args.dst_ip, args.dst_ips, st.frame_size, src_port, args.src_ports,
                        args.dst_port, args.dst_ports)
+            fwd_streams.append(STLStream(packet=fwd_pkt, mode=STLTXCont(pps=st.pps)))
 
-            stream = STLStream(packet=pkt, mode=STLTXCont(pps=st.pps))
-            streams.append(stream)
+            if args.bidir:
+                # Reverse: port 1 → port 0 (swapped MAC, IP, ports)
+                rev_pkt = create_pkt_udp_with_vm(args.dst_mac, args.src_mac,
+                           args.dst_ip, args.dst_ips,
+                           args.src_ip, args.src_ips, st.frame_size, args.dst_port, args.dst_ports,
+                           src_port, args.src_ports)
+                rev_streams.append(STLStream(packet=rev_pkt, mode=STLTXCont(pps=st.pps)))
 
-        c.add_streams(streams, ports=[0])
+        c.add_streams(fwd_streams, ports=[0])
+        if args.bidir:
+            c.add_streams(rev_streams, ports=[1])
         start_time = time.time()  # Record start
 
-        c.start(ports=[0], mult="1", duration=args.duration)
-        c.wait_on_traffic(ports=[0])  # wait on TX port until done (adjust if needed)
+        c.start(ports=ports, mult="1", duration=args.duration)
+        c.wait_on_traffic(ports=ports)
         end_time = time.time()  # Record end
         elapsed = end_time - start_time
         deviation = elapsed - args.duration
@@ -206,39 +215,80 @@ def run_test(args, st):
         stats_tx = stats_ports[0]
         stats_rx = stats_ports[1]
 
-        #print("Port 0 stats:", stats_ports[0])
-        #print("Port 1 stats:", stats_ports[1])
+        if args.bidir:
+            # Forward: port 0 TX → port 1 RX
+            # Reverse: port 1 TX → port 0 RX
+            fwd_tx_pkts = stats_tx.get("opackets", 0)
+            fwd_rx_pkts = stats_rx.get("ipackets", 0)
+            rev_tx_pkts = stats_rx.get("opackets", 0)
+            rev_rx_pkts = stats_tx.get("ipackets", 0)
 
-        # Gather stats per run, convert bps to GiB/s
-        result = {
-            "tx_pps": stats_tx.get("tx_pps", 0),
-            "tx_bps": stats_tx.get("tx_bps", 0),
-            "tx_throughput_gibps": bits_to_gibps(stats_tx.get("tx_bps_L1", 0)),
-            "tx_errors": stats_tx.get("tx_err", 0),
-            "tx_opackets": stats_tx.get("opackets", 0),
-            "tx_obytes": stats_tx.get("obytes", 0),
-            "tx_ipackets": stats_tx.get("ipackets", 0),
-            "tx_ibytes": stats_tx.get("ibytes", 0),
+            result = {
+                # Forward direction (port 0 → port 1)
+                "fwd_tx_pps": stats_tx.get("tx_pps", 0),
+                "fwd_tx_bps": stats_tx.get("tx_bps", 0),
+                "fwd_tx_throughput_gibps": bits_to_gibps(stats_tx.get("tx_bps_L1", 0)),
+                "fwd_tx_errors": stats_tx.get("tx_err", 0),
+                "fwd_tx_opackets": fwd_tx_pkts,
+                "fwd_tx_obytes": stats_tx.get("obytes", 0),
+                "fwd_rx_pps": stats_rx.get("rx_pps", 0),
+                "fwd_rx_bps": stats_rx.get("rx_bps", 0),
+                "fwd_rx_throughput_gibps": bits_to_gibps(stats_rx.get("rx_bps_L1", 0)),
+                "fwd_rx_ipackets": fwd_rx_pkts,
+                "fwd_rx_ibytes": stats_rx.get("ibytes", 0),
+                "fwd_l_pkts": fwd_tx_pkts - fwd_rx_pkts,
+                "fwd_l_pkts_percent": ((fwd_tx_pkts - fwd_rx_pkts) / fwd_tx_pkts * 100) if fwd_tx_pkts else 0,
 
-            "rx_pps": stats_rx.get("rx_pps", 0),
-            "rx_bps": stats_rx.get("rx_bps", 0),
-            "rx_throughput_gibps": bits_to_gibps(stats_rx.get("rx_bps_L1", 0)),
-            "rx_ipackets": stats_rx.get("ipackets", 0),
-            "rx_ibytes": stats_rx.get("ibytes", 0),
-            "rx_opackets": stats_rx.get("opackets", 0),
-            "rx_obytes": stats_rx.get("obytes", 0),
-            "rx_drops": stats_rx.get("rx_drops", 0),
-            "l_pkts": stats_tx.get("opackets", 0) -  stats_rx.get("ipackets", 0),
-            "l_bytes": stats_tx.get("obytes", 0) - stats_rx.get("ibytes", 0),
-            "l_pkts_percent": ((stats_tx.get("opackets", 0) -  stats_rx.get("ipackets", 0))/stats_tx.get("opackets", 0)) * 100,
+                # Reverse direction (port 1 → port 0)
+                "rev_tx_pps": stats_rx.get("tx_pps", 0),
+                "rev_tx_bps": stats_rx.get("tx_bps", 0),
+                "rev_tx_throughput_gibps": bits_to_gibps(stats_rx.get("tx_bps_L1", 0)),
+                "rev_tx_errors": stats_rx.get("tx_err", 0),
+                "rev_tx_opackets": rev_tx_pkts,
+                "rev_tx_obytes": stats_rx.get("obytes", 0),
+                "rev_rx_pps": stats_tx.get("rx_pps", 0),
+                "rev_rx_bps": stats_tx.get("rx_bps", 0),
+                "rev_rx_throughput_gibps": bits_to_gibps(stats_tx.get("rx_bps_L1", 0)),
+                "rev_rx_ipackets": rev_rx_pkts,
+                "rev_rx_ibytes": stats_tx.get("ibytes", 0),
+                "rev_l_pkts": rev_tx_pkts - rev_rx_pkts,
+                "rev_l_pkts_percent": ((rev_tx_pkts - rev_rx_pkts) / rev_tx_pkts * 100) if rev_tx_pkts else 0,
+            }
+        else:
+            # Unidirectional: original stats format
+            result = {
+                "tx_pps": stats_tx.get("tx_pps", 0),
+                "tx_bps": stats_tx.get("tx_bps", 0),
+                "tx_throughput_gibps": bits_to_gibps(stats_tx.get("tx_bps_L1", 0)),
+                "tx_errors": stats_tx.get("tx_err", 0),
+                "tx_opackets": stats_tx.get("opackets", 0),
+                "tx_obytes": stats_tx.get("obytes", 0),
+                "tx_ipackets": stats_tx.get("ipackets", 0),
+                "tx_ibytes": stats_tx.get("ibytes", 0),
+
+                "rx_pps": stats_rx.get("rx_pps", 0),
+                "rx_bps": stats_rx.get("rx_bps", 0),
+                "rx_throughput_gibps": bits_to_gibps(stats_rx.get("rx_bps_L1", 0)),
+                "rx_ipackets": stats_rx.get("ipackets", 0),
+                "rx_ibytes": stats_rx.get("ibytes", 0),
+                "rx_opackets": stats_rx.get("opackets", 0),
+                "rx_obytes": stats_rx.get("obytes", 0),
+                "rx_drops": stats_rx.get("rx_drops", 0),
+                "l_pkts": stats_tx.get("opackets", 0) - stats_rx.get("ipackets", 0),
+                "l_bytes": stats_tx.get("obytes", 0) - stats_rx.get("ibytes", 0),
+                "l_pkts_percent": ((stats_tx.get("opackets", 0) - stats_rx.get("ipackets", 0)) / stats_tx.get("opackets", 0)) * 100 if stats_tx.get("opackets", 0) else 0,
+            }
+
+        result.update({
+            "bidir": args.bidir,
             "src_ips": args.src_ips,
             "dst_ips": args.dst_ips,
             "src_ports": args.src_ports,
             "dst_ports": args.dst_ports,
-            "elapsed_runtime":  elapsed,
+            "elapsed_runtime": elapsed,
             "duration": args.duration,
             "runtime_deviation": runtime_deviation
-        }
+        })
 
         stats = c.get_stats()
         global_stats = stats.get('global', {})
@@ -257,8 +307,13 @@ def run_test(args, st):
                 "cpu_load_avg": avg_load,
                 "num_cpus": num_cpus
             })
-        print (f"rx {result['rx_throughput_gibps']:.2f} Gbps loss {result['l_pkts_percent']:.2f} %", end="")
-        print (f' transmission took {elapsed:.2f} seconds')
+        if args.bidir:
+            print(f"fwd rx {result['fwd_rx_throughput_gibps']:.2f} Gbps loss {result['fwd_l_pkts_percent']:.2f}%", end="")
+            print(f" | rev rx {result['rev_rx_throughput_gibps']:.2f} Gbps loss {result['rev_l_pkts_percent']:.2f}%", end="")
+            print(f' | {elapsed:.2f} sec')
+        else:
+            print(f"rx {result['rx_throughput_gibps']:.2f} Gbps loss {result['l_pkts_percent']:.2f} %", end="")
+            print(f' transmission took {elapsed:.2f} seconds')
     finally:
         c.disconnect()
 
@@ -431,6 +486,8 @@ if __name__ == "__main__":
     parser.add_argument("--csvfile", type=str, default="trex_results.csv")
     parser.add_argument('--no-priming', action='store_true',
                         help='Disable priming', default=False)
+    parser.add_argument('--bidir', action='store_true', default=False,
+                        help='Enable bidirectional flows (reverse direction with swapped src/dst)')
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--pps", type=str, action='append', default=None, help="Packets per second")
     group.add_argument("--throughput", "--tp", type=str,
