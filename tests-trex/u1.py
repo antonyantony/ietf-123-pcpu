@@ -5,6 +5,8 @@ import csv
 import time
 import ipaddress
 import asyncio
+import tomllib
+import subprocess
 from interface_diag import InterfaceDiagnostics
 
 sys.path.append('/var/tmp/trex-v3.08/automation/trex_control_plane/interactive')
@@ -327,7 +329,7 @@ async def run_tests (args, st):
     # Run all test runs and collect results
     for run_id in range(1, args.runs + 1):
         print(f" run {run_id}/{args.runs} ",  end="")
-        if not args.no_priming:
+        if args.priming:
             run_priming_delay(args, st)
         run_result = run_test(args, st)
         run_result.update({
@@ -464,51 +466,203 @@ class Def_v6:
   src_ip = "2001:db8:0:1::254"
   dst_ip = "2001:db8:0:2::254"
 
+# MAC resolution: interface names and gateway IPs
+IFACE_FWD = "redwest"    # local interface for forward src-mac
+IFACE_REV = "redeast"    # local interface for reverse src-mac
+GW_FWD = "192.0.1.254"   # gateway IP to ARP-resolve forward dst-mac
+GW_REV = "192.0.2.254"   # gateway IP to ARP-resolve reverse dst-mac
+
+def get_iface_mac(iface):
+    """Read MAC address of a local network interface."""
+    path = f"/sys/class/net/{iface}/address"
+    try:
+        with open(path) as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        print(f"Warning: interface {iface} not found, cannot resolve MAC")
+        return None
+
+def arp_resolve_mac(ip):
+    """Ping IP to populate ARP cache, then read MAC from neighbor table."""
+    subprocess.run(["ping", "-c", "1", "-W", "1", ip],
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    result = subprocess.run(["ip", "neigh", "show", ip],
+                            capture_output=True, text=True)
+    for line in result.stdout.strip().split("\n"):
+        parts = line.split()
+        if "lladdr" in parts:
+            return parts[parts.index("lladdr") + 1]
+    print(f"Warning: cannot resolve MAC for {ip}")
+    return None
+
+def gen_config(filepath, args, parser):
+    """Write current options (defaults + CLI overrides) as a commented TOML file.
+    Iterates parser argument groups automatically — adding a new arg to a group
+    is all that's needed."""
+
+    def fmt(val):
+        if isinstance(val, bool):
+            return "true" if val else "false"
+        if isinstance(val, list):
+            items = ", ".join(f'"{v}"' if isinstance(v, str) else str(v) for v in val)
+            return f"[{items}]"
+        if isinstance(val, str):
+            return f'"{val}"'
+        return str(val)
+
+    skip = {"config", "gen_config", "help"}
+
+    # Collect dests that belong to mutually exclusive groups
+    mutex_dests = set()
+    for mg in parser._mutually_exclusive_groups:
+        for action in mg._group_actions:
+            mutex_dests.add(action.dest)
+
+    d = dict(vars(args))
+    if not d.get("frame_sizes"):
+        d["frame_sizes"] = Def.frame_sizes
+
+    # Auto-resolve MACs that weren't explicitly set
+    if d["src_mac"] is None:
+        d["src_mac"] = get_iface_mac(IFACE_FWD)
+    if d["rev_src_mac"] is None:
+        d["rev_src_mac"] = get_iface_mac(IFACE_REV)
+    if d["dst_mac"] is None:
+        d["dst_mac"] = arp_resolve_mac(GW_FWD)
+    if d["rev_dst_mac"] is None:
+        d["rev_dst_mac"] = arp_resolve_mac(GW_REV)
+
+    lines = ["# TRex test configuration\n\n"]
+
+    for group in parser._action_groups:
+        # Skip the two default groups (positional arguments, options)
+        if group.title in ("positional arguments", "options"):
+            continue
+
+        actions = [a for a in group._group_actions if a.dest not in skip]
+        if not actions:
+            continue
+
+        for title_line in group.title.split("\n"):
+            lines.append(f"# {title_line}\n")
+
+        for action in actions:
+            key = action.dest.replace("_", "-")
+            val = d.get(action.dest)
+
+            # Comment out: None values and False members of mutually exclusive groups
+            comment_out = (val is None) or (action.dest in mutex_dests and val is False)
+
+            if comment_out:
+                hint = f"  # {action.help}" if action.help else ""
+                lines.append(f"# {key} = {fmt(val) if val is not None else '\"\"'}{hint}\n")
+            else:
+                lines.append(f"{key} = {fmt(val)}\n")
+
+        lines.append("\n")
+
+    with open(filepath, "w") as f:
+        f.writelines(lines)
+    print(f"Config written to {filepath}")
+
+
+def load_config(filepath, parser):
+    """Load TOML config, validate keys, and set as parser defaults."""
+    # Build set of valid dest names
+    valid_dests = set()
+    for action in parser._actions:
+        if action.dest != "help":
+            valid_dests.add(action.dest)
+
+    with open(filepath, "rb") as f:
+        raw_config = tomllib.load(f)
+
+    # Validate keys and convert dashes to underscores
+    config = {}
+    for key, val in raw_config.items():
+        dest_key = key.replace("-", "_")
+        if dest_key not in valid_dests:
+            print(f"Error: unknown config key '{key}' in {filepath}")
+            sys.exit(1)
+        config[dest_key] = val
+
+    parser.set_defaults(**config)
+
+
 if __name__ == "__main__":
 
     d = Def()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--server", type=str, default="127.0.0.1")
-    parser.add_argument("--dst-ip", type=str, default="192.0.2.250")
-    parser.add_argument("--dst-ips", type=int, default=1)
-    parser.add_argument("--src-ips", type=int, default=1)
-    parser.add_argument("--src-ip", type=str, default="192.0.1.1")
-    parser.add_argument("--dst-mac", type=str, default="24:8a:07:5b:15:0c")
-    parser.add_argument("--src-mac", type=str, default="b8:59:9f:3a:b7:0e")
-    parser.add_argument("--src-port", type=int, default=4501)
-    parser.add_argument("--src-ports", type=int, default=1)
-    parser.add_argument("--dst-ports", type=int, default=1)
-    parser.add_argument("--dst-port", type=int, default=5201)
-    parser.add_argument("--flows-start", "--flows", type=int, default=1, help="Number of UDP flows to generate start")
-    parser.add_argument("--flows-end", type=int, default=1, help="Number of UDP flows to generate end ")
-    parser.add_argument("--frame-sizes", type=int, action='append', default=[],
+    parser.add_argument("--config", type=str, nargs="?", const="u1.conf", default=None,
+                        metavar="FILE",
+                        help="Load options from TOML config file (default: u1.conf)")
+    parser.add_argument("--gen-config", type=str, nargs="?", const="u1.conf", default=None,
+                        metavar="FILE",
+                        help="Generate TOML config file from current options, then exit (default: u1.conf)")
+
+    srv = parser.add_argument_group("TRex server")
+    srv.add_argument("--server", type=str, default="127.0.0.1")
+
+    fwd = parser.add_argument_group("Forward direction (port 0 → port 1)")
+    fwd.add_argument("--src-mac", type=str, default=None)
+    fwd.add_argument("--dst-mac", type=str, default=None)
+    fwd.add_argument("--src-ip", type=str, default="192.0.1.1")
+    fwd.add_argument("--dst-ip", type=str, default="192.0.2.250")
+    fwd.add_argument("--src-ips", type=int, default=1)
+    fwd.add_argument("--dst-ips", type=int, default=1)
+    fwd.add_argument("--src-port", type=int, default=4501)
+    fwd.add_argument("--dst-port", type=int, default=5201)
+    fwd.add_argument("--src-ports", type=int, default=1)
+    fwd.add_argument("--dst-ports", type=int, default=1)
+
+    rev_grp = parser.add_argument_group("Reverse direction (port 1 → port 0)\nUsed with --bidir or --rev")
+    rev_grp.add_argument('--rev-dst-mac', type=str, default=None,
+                        help='DUT MAC on port 1 side')
+    rev_grp.add_argument('--rev-src-mac', type=str, default=None,
+                        help='default: TRex port 1 HW MAC')
+    rev_grp.add_argument('--rev-src-ip', type=str, default=None,
+                        help='default: dst-ip')
+    rev_grp.add_argument('--rev-dst-ip', type=str, default="192.0.1.250")
+
+    test = parser.add_argument_group("Test parameters")
+    test.add_argument("--frame-sizes", type=int, action='append', default=[],
                         help="Specify frame size in bytes; can be used multiple times. Default is 1440 bytes L1 1518 - IPsec.")
-    parser.add_argument("--duration", type=int, default=30)
-    parser.add_argument("--runs", type=int, default=5)
-    parser.add_argument("--csvfile", type=str, default="trex_results.csv")
-    parser.add_argument('--no-priming', action='store_true',
-                        help='Disable priming', default=False)
-    dir_group = parser.add_mutually_exclusive_group()
-    dir_group.add_argument('--bidir', action='store_true', default=False,
+    test.add_argument("--duration", type=int, default=30)
+    test.add_argument("--runs", type=int, default=5)
+    test.add_argument("--csvfile", type=str, default="trex_results.csv")
+    test.add_argument('--priming', action=argparse.BooleanOptionalAction,
+                        help='Enable/disable priming', default=True)
+
+    dir_grp = parser.add_argument_group("Direction (mutually exclusive)")
+    dir_mutex = dir_grp.add_mutually_exclusive_group()
+    dir_mutex.add_argument('--bidir', action='store_true', default=False,
                         help='Enable bidirectional flows (forward + reverse)')
-    dir_group.add_argument('--rev', action='store_true', default=False,
+    dir_mutex.add_argument('--rev', action='store_true', default=False,
                         help='Reverse only (port 1 → port 0)')
-    parser.add_argument('--rev-dst-mac', type=str, default="24:8a:07:5b:14:e1",
-                        help='DUT MAC on port 1 side for reverse direction')
-    parser.add_argument('--rev-src-mac', type=str, default=None,
-                        help='TRex port 1 source MAC for reverse direction (default: TRex port 1 HW MAC)')
-    parser.add_argument('--rev-src-ip', type=str, default=None,
-                        help='Source IP for reverse direction (default: --dst-ip)')
-    parser.add_argument('--rev-dst-ip', type=str, default="192.0.1.250",
-                        help='Destination IP for reverse direction (default: --src-ip)')
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument("--pps", type=str, action='append', default=None, help="Packets per second")
-    group.add_argument("--throughput", "--tp", type=str,
+
+    rate_grp = parser.add_argument_group("Rate (mutually exclusive)")
+    rate_mutex = rate_grp.add_mutually_exclusive_group()
+    rate_mutex.add_argument("--pps", type=str, action='append', default=None, help="Packets per second")
+    rate_mutex.add_argument("--throughput", "--tp", type=str,
                        default=None,
-                       help="Target throughput with optional units: G for Gbps, M for Mbps, or bps if no unit, e.g., 10G, 500M, 10. ")
+                       help="Target throughput: G for Gbps, M for Mbps, e.g. 10G, 500M")
+
+    flow_grp = parser.add_argument_group("Flow range")
+    flow_grp.add_argument("--flows-start", "--flows", type=int, default=1, help="Number of UDP flows start")
+    flow_grp.add_argument("--flows-end", type=int, default=1, help="Number of UDP flows end")
+
+    # Early parse to check for --config (needs to set defaults before full parse)
+    early_args, _ = parser.parse_known_args()
+
+    if early_args.config:
+        load_config(early_args.config, parser)
 
     args = parser.parse_args()
+
+    if args.gen_config:
+        gen_config(args.gen_config, args, parser)
+        sys.exit(0)
 
     args.use_rev = args.bidir or args.rev
     if args.use_rev:
