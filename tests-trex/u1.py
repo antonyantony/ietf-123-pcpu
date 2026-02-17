@@ -138,21 +138,29 @@ def run_priming(args, st, n=1, delay_ms=100):
         c.reset(ports=[0, 1])
         c.clear_stats()
 
-        ports = [0, 1] if args.bidir else [0]
+        use_fwd = not args.rev  # forward unless --rev only
+        use_rev = args.use_rev
+        ports = []
+        if use_fwd:
+            ports.append(0)
+        if use_rev:
+            ports.append(1)
 
         for flow_id in range(st.flows):
             src_port = args.src_port + flow_id
-            # Forward: port 0 → port 1
-            fwd_pkt = create_pkt_udp(args.src_mac, args.dst_mac, args.src_ip,
-                             args.dst_ip, st.frame_size, src_port,
-                             args.dst_port)
-            fwd_stream = STLStream(packet=fwd_pkt, mode=STLTXSingleBurst(total_pkts=n))
-            c.add_streams([fwd_stream], ports=[0])
 
-            if args.bidir:
-                # Reverse: port 1 → port 0 (swapped MAC, IP, ports)
-                rev_pkt = create_pkt_udp(args.dst_mac, args.src_mac, args.dst_ip,
-                                 args.src_ip, st.frame_size, args.dst_port,
+            if use_fwd:
+                # Forward: port 0 → port 1
+                fwd_pkt = create_pkt_udp(args.src_mac, args.dst_mac, args.src_ip,
+                                 args.dst_ip, st.frame_size, src_port,
+                                 args.dst_port)
+                fwd_stream = STLStream(packet=fwd_pkt, mode=STLTXSingleBurst(total_pkts=n))
+                c.add_streams([fwd_stream], ports=[0])
+
+            if use_rev:
+                # Reverse: port 1 → port 0
+                rev_pkt = create_pkt_udp(args.rev_src_mac, args.rev_dst_mac, args.rev_src_ip,
+                                 args.rev_dst_ip, st.frame_size, args.dst_port,
                                  src_port)
                 rev_stream = STLStream(packet=rev_pkt, mode=STLTXSingleBurst(total_pkts=n))
                 c.add_streams([rev_stream], ports=[1])
@@ -182,29 +190,39 @@ def run_test(args, st):
         c.reset(ports=[0, 1])
         c.clear_stats()
 
-        ports = [0, 1] if args.bidir else [0]
+        use_fwd = not args.rev  # forward unless --rev only
+        use_rev = args.use_rev
+        ports = []
+        if use_fwd:
+            ports.append(0)
+        if use_rev:
+            ports.append(1)
+
         fwd_streams = []
         rev_streams = []
 
         for flow_id in range(st.flows):
             src_port = args.src_port + flow_id
-            # Forward: port 0 → port 1
-            fwd_pkt = create_pkt_udp_with_vm(args.src_mac, args.dst_mac,
-                       args.src_ip, args.src_ips,
-                       args.dst_ip, args.dst_ips, st.frame_size, src_port, args.src_ports,
-                       args.dst_port, args.dst_ports)
-            fwd_streams.append(STLStream(packet=fwd_pkt, mode=STLTXCont(pps=st.pps)))
 
-            if args.bidir:
-                # Reverse: port 1 → port 0 (swapped MAC, IP, ports)
-                rev_pkt = create_pkt_udp_with_vm(args.dst_mac, args.src_mac,
-                           args.dst_ip, args.dst_ips,
-                           args.src_ip, args.src_ips, st.frame_size, args.dst_port, args.dst_ports,
+            if use_fwd:
+                # Forward: port 0 → port 1
+                fwd_pkt = create_pkt_udp_with_vm(args.src_mac, args.dst_mac,
+                           args.src_ip, args.src_ips,
+                           args.dst_ip, args.dst_ips, st.frame_size, src_port, args.src_ports,
+                           args.dst_port, args.dst_ports)
+                fwd_streams.append(STLStream(packet=fwd_pkt, mode=STLTXCont(pps=st.pps)))
+
+            if use_rev:
+                # Reverse: port 1 → port 0
+                rev_pkt = create_pkt_udp_with_vm(args.rev_src_mac, args.rev_dst_mac,
+                           args.rev_src_ip, args.dst_ips,
+                           args.rev_dst_ip, args.src_ips, st.frame_size, args.dst_port, args.dst_ports,
                            src_port, args.src_ports)
                 rev_streams.append(STLStream(packet=rev_pkt, mode=STLTXCont(pps=st.pps)))
 
-        c.add_streams(fwd_streams, ports=[0])
-        if args.bidir:
+        if use_fwd:
+            c.add_streams(fwd_streams, ports=[0])
+        if use_rev:
             c.add_streams(rev_streams, ports=[1])
         start_time = time.time()  # Record start
 
@@ -220,75 +238,51 @@ def run_test(args, st):
             runtime_deviation = 0   # or "within tolerance"
 
         stats_ports = c.get_stats()
-        stats_tx = stats_ports[0]
-        stats_rx = stats_ports[1]
+        p0 = stats_ports[0]
+        p1 = stats_ports[1]
 
-        if args.bidir:
-            # Forward: port 0 TX → port 1 RX
-            # Reverse: port 1 TX → port 0 RX
-            fwd_tx_pkts = stats_tx.get("opackets", 0)
-            fwd_rx_pkts = stats_rx.get("ipackets", 0)
-            rev_tx_pkts = stats_rx.get("opackets", 0)
-            rev_rx_pkts = stats_tx.get("ipackets", 0)
+        result = {}
 
-            result = {
-                # Forward direction (port 0 → port 1)
-                "fwd_tx_pps": stats_tx.get("tx_pps", 0),
-                "fwd_tx_bps": stats_tx.get("tx_bps", 0),
-                "fwd_tx_throughput_gibps": bits_to_gibps(stats_tx.get("tx_bps_L1", 0)),
-                "fwd_tx_errors": stats_tx.get("tx_err", 0),
+        if use_fwd:
+            fwd_tx_pkts = p0.get("opackets", 0)
+            fwd_rx_pkts = p1.get("ipackets", 0)
+            result.update({
+                "fwd_tx_pps": p0.get("tx_pps", 0),
+                "fwd_tx_bps": p0.get("tx_bps", 0),
+                "fwd_tx_throughput_gibps": bits_to_gibps(p0.get("tx_bps_L1", 0)),
+                "fwd_tx_errors": p0.get("tx_err", 0),
                 "fwd_tx_opackets": fwd_tx_pkts,
-                "fwd_tx_obytes": stats_tx.get("obytes", 0),
-                "fwd_rx_pps": stats_rx.get("rx_pps", 0),
-                "fwd_rx_bps": stats_rx.get("rx_bps", 0),
-                "fwd_rx_throughput_gibps": bits_to_gibps(stats_rx.get("rx_bps_L1", 0)),
+                "fwd_tx_obytes": p0.get("obytes", 0),
+                "fwd_rx_pps": p1.get("rx_pps", 0),
+                "fwd_rx_bps": p1.get("rx_bps", 0),
+                "fwd_rx_throughput_gibps": bits_to_gibps(p1.get("rx_bps_L1", 0)),
                 "fwd_rx_ipackets": fwd_rx_pkts,
-                "fwd_rx_ibytes": stats_rx.get("ibytes", 0),
+                "fwd_rx_ibytes": p1.get("ibytes", 0),
                 "fwd_l_pkts": fwd_tx_pkts - fwd_rx_pkts,
                 "fwd_l_pkts_percent": ((fwd_tx_pkts - fwd_rx_pkts) / fwd_tx_pkts * 100) if fwd_tx_pkts else 0,
+            })
 
-                # Reverse direction (port 1 → port 0)
-                "rev_tx_pps": stats_rx.get("tx_pps", 0),
-                "rev_tx_bps": stats_rx.get("tx_bps", 0),
-                "rev_tx_throughput_gibps": bits_to_gibps(stats_rx.get("tx_bps_L1", 0)),
-                "rev_tx_errors": stats_rx.get("tx_err", 0),
+        if use_rev:
+            rev_tx_pkts = p1.get("opackets", 0)
+            rev_rx_pkts = p0.get("ipackets", 0)
+            result.update({
+                "rev_tx_pps": p1.get("tx_pps", 0),
+                "rev_tx_bps": p1.get("tx_bps", 0),
+                "rev_tx_throughput_gibps": bits_to_gibps(p1.get("tx_bps_L1", 0)),
+                "rev_tx_errors": p1.get("tx_err", 0),
                 "rev_tx_opackets": rev_tx_pkts,
-                "rev_tx_obytes": stats_rx.get("obytes", 0),
-                "rev_rx_pps": stats_tx.get("rx_pps", 0),
-                "rev_rx_bps": stats_tx.get("rx_bps", 0),
-                "rev_rx_throughput_gibps": bits_to_gibps(stats_tx.get("rx_bps_L1", 0)),
+                "rev_tx_obytes": p1.get("obytes", 0),
+                "rev_rx_pps": p0.get("rx_pps", 0),
+                "rev_rx_bps": p0.get("rx_bps", 0),
+                "rev_rx_throughput_gibps": bits_to_gibps(p0.get("rx_bps_L1", 0)),
                 "rev_rx_ipackets": rev_rx_pkts,
-                "rev_rx_ibytes": stats_tx.get("ibytes", 0),
+                "rev_rx_ibytes": p0.get("ibytes", 0),
                 "rev_l_pkts": rev_tx_pkts - rev_rx_pkts,
                 "rev_l_pkts_percent": ((rev_tx_pkts - rev_rx_pkts) / rev_tx_pkts * 100) if rev_tx_pkts else 0,
-            }
-        else:
-            # Unidirectional: original stats format
-            result = {
-                "tx_pps": stats_tx.get("tx_pps", 0),
-                "tx_bps": stats_tx.get("tx_bps", 0),
-                "tx_throughput_gibps": bits_to_gibps(stats_tx.get("tx_bps_L1", 0)),
-                "tx_errors": stats_tx.get("tx_err", 0),
-                "tx_opackets": stats_tx.get("opackets", 0),
-                "tx_obytes": stats_tx.get("obytes", 0),
-                "tx_ipackets": stats_tx.get("ipackets", 0),
-                "tx_ibytes": stats_tx.get("ibytes", 0),
-
-                "rx_pps": stats_rx.get("rx_pps", 0),
-                "rx_bps": stats_rx.get("rx_bps", 0),
-                "rx_throughput_gibps": bits_to_gibps(stats_rx.get("rx_bps_L1", 0)),
-                "rx_ipackets": stats_rx.get("ipackets", 0),
-                "rx_ibytes": stats_rx.get("ibytes", 0),
-                "rx_opackets": stats_rx.get("opackets", 0),
-                "rx_obytes": stats_rx.get("obytes", 0),
-                "rx_drops": stats_rx.get("rx_drops", 0),
-                "l_pkts": stats_tx.get("opackets", 0) - stats_rx.get("ipackets", 0),
-                "l_bytes": stats_tx.get("obytes", 0) - stats_rx.get("ibytes", 0),
-                "l_pkts_percent": ((stats_tx.get("opackets", 0) - stats_rx.get("ipackets", 0)) / stats_tx.get("opackets", 0)) * 100 if stats_tx.get("opackets", 0) else 0,
-            }
+            })
 
         result.update({
-            "bidir": args.bidir,
+            "direction": "bidir" if args.bidir else ("rev" if args.rev else "fwd"),
             "src_ips": args.src_ips,
             "dst_ips": args.dst_ips,
             "src_ports": args.src_ports,
@@ -315,13 +309,13 @@ def run_test(args, st):
                 "cpu_load_avg": avg_load,
                 "num_cpus": num_cpus
             })
-        if args.bidir:
-            print(f"fwd rx {result['fwd_rx_throughput_gibps']:.2f} Gbps loss {result['fwd_l_pkts_percent']:.2f}%", end="")
-            print(f" | rev rx {result['rev_rx_throughput_gibps']:.2f} Gbps loss {result['rev_l_pkts_percent']:.2f}%", end="")
-            print(f' | {elapsed:.2f} sec')
-        else:
-            print(f"rx {result['rx_throughput_gibps']:.2f} Gbps loss {result['l_pkts_percent']:.2f} %", end="")
-            print(f' transmission took {elapsed:.2f} seconds')
+        parts = []
+        if use_fwd:
+            parts.append(f"fwd rx {result['fwd_rx_throughput_gibps']:.2f} Gbps loss {result['fwd_l_pkts_percent']:.2f}%")
+        if use_rev:
+            parts.append(f"rev rx {result['rev_rx_throughput_gibps']:.2f} Gbps loss {result['rev_l_pkts_percent']:.2f}%")
+        parts.append(f"{elapsed:.2f} sec")
+        print(" | ".join(parts))
     finally:
         c.disconnect()
 
@@ -438,7 +432,8 @@ def run_test_frame_sizes(args, pps):
             st.flows = flows
             st.pps = pps/flows
 
-            print(f"Setting flows {st.flows}/{args.flows_end} pps {st.pps:.2f}/{pps:.2f} per flow throughput {args.throughput} and frame-size {st.frame_size} runs {args.runs} duration {args.duration} sec")
+            dir_str = " bidir" if args.bidir else (" rev" if args.rev else "")
+            print(f"Setting flows {st.flows}/{args.flows_end} pps {st.pps:.2f}/{pps:.2f} per flow throughput {args.throughput} and frame-size {st.frame_size} runs {args.runs} duration {args.duration} sec{dir_str}")
             test_results = asyncio.run(run_tests(args, st))
             all_results_frame_size.extend(test_results)
 
@@ -494,8 +489,19 @@ if __name__ == "__main__":
     parser.add_argument("--csvfile", type=str, default="trex_results.csv")
     parser.add_argument('--no-priming', action='store_true',
                         help='Disable priming', default=False)
-    parser.add_argument('--bidir', action='store_true', default=False,
-                        help='Enable bidirectional flows (reverse direction with swapped src/dst)')
+    dir_group = parser.add_mutually_exclusive_group()
+    dir_group.add_argument('--bidir', action='store_true', default=False,
+                        help='Enable bidirectional flows (forward + reverse)')
+    dir_group.add_argument('--rev', action='store_true', default=False,
+                        help='Reverse only (port 1 → port 0)')
+    parser.add_argument('--rev-dst-mac', type=str, default="24:8a:07:5b:14:e1",
+                        help='DUT MAC on port 1 side for reverse direction')
+    parser.add_argument('--rev-src-mac', type=str, default=None,
+                        help='TRex port 1 source MAC for reverse direction (default: TRex port 1 HW MAC)')
+    parser.add_argument('--rev-src-ip', type=str, default=None,
+                        help='Source IP for reverse direction (default: --dst-ip)')
+    parser.add_argument('--rev-dst-ip', type=str, default="192.0.1.250",
+                        help='Destination IP for reverse direction (default: --src-ip)')
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--pps", type=str, action='append', default=None, help="Packets per second")
     group.add_argument("--throughput", "--tp", type=str,
@@ -503,6 +509,24 @@ if __name__ == "__main__":
                        help="Target throughput with optional units: G for Gbps, M for Mbps, or bps if no unit, e.g., 10G, 500M, 10. ")
 
     args = parser.parse_args()
+
+    args.use_rev = args.bidir or args.rev
+    if args.use_rev:
+        if not args.rev_src_ip:
+            args.rev_src_ip = args.dst_ip
+        if not args.rev_dst_ip:
+            args.rev_dst_ip = args.src_ip
+        if not args.rev_src_mac:
+            # Query TRex port 1 HW MAC as default
+            c = trex_connect(args.server)
+            try:
+                info = c.get_port_info(ports=[1])[0]
+                args.rev_src_mac = info['hw_mac']
+                print(f"Using TRex port 1 HW MAC for reverse src: {args.rev_src_mac}")
+            finally:
+                c.disconnect()
+        print(f"Reverse: {args.rev_src_ip} -> {args.rev_dst_ip} src-mac {args.rev_src_mac} dst-mac {args.rev_dst_mac}")
+
     all_results = []  # To hold dicts per run
     if args.flows_end <= args.flows_start:
         args.flows_end = args.flows_start
