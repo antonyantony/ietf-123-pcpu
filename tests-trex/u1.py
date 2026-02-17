@@ -18,7 +18,17 @@ from trex.stl.api import (
     STLClient, STLStream, STLTXCont, STLPktBuilder, STLTXSingleBurst,
     STLScVmRaw, STLVmFlowVar, STLVmWrFlowVar, STLVmFixIpv4, STLVmFixChecksumHw
 )
+from trex.common.trex_exceptions import TRexError
 from scapy.all import Ether, IP, IPv6, UDP
+
+def trex_connect(server):
+    c = STLClient(server=server)
+    try:
+        c.connect()
+    except TRexError:
+        print(f"Error: cannot connect to TRex server at {server}. Is it running?")
+        sys.exit(1)
+    return c
 
 def is_ipv4_address(ip):
     try:
@@ -123,9 +133,8 @@ def run_priming(args, st, n=1, delay_ms=100):
     The first stream is sent twice.
     Delay (in milliseconds) between streams.
     """
-    c = STLClient(server=args.server)
+    c = trex_connect(args.server)
     try:
-        c.connect()
         c.reset(ports=[0, 1])
         c.clear_stats()
 
@@ -168,9 +177,8 @@ def run_priming_delay(args, st):
     run_priming(args, st, n=1, delay_ms=100)
 
 def run_test(args, st):
-    c = STLClient(server=args.server)
+    c = trex_connect(args.server)
     try:
-        c.connect()
         c.reset(ports=[0, 1])
         c.clear_stats()
 
