@@ -1,16 +1,15 @@
-#!/root/venv/bin/python3.9
+#!/root/venv/bin/python3.12
 import sys
 import json
 import csv
 import time
 import ipaddress
 import asyncio
-import yaml
 from interface_diag import InterfaceDiagnostics
 
-sys.path.append('/var/tmp/trex-v3.06/automation/trex_control_plane/interactive')
-sys.path.append('/var/tmp/trex-v3.06/scripts')
-sys.path.append('/var/tmp/trex-v3.06/automation/trex_control_plane/interactive/trex_stl_lib')
+sys.path.append('/var/tmp/trex-v3.08/automation/trex_control_plane/interactive')
+sys.path.append('/var/tmp/trex-v3.08/scripts')
+sys.path.append('/var/tmp/trex-v3.08/automation/trex_control_plane/interactive/trex_stl_lib')
 
 from types import SimpleNamespace
 
@@ -273,20 +272,7 @@ async def run_tests (args, st):
         print(f" run {run_id}/{args.runs} ",  end="")
         if not args.no_priming:
             run_priming_delay(args, st)
-
-        if args.interface_stats:
-            diag = InterfaceDiagnostics()
-            await diag.collect_data(phase="start")
-
         run_result = run_test(args, st)
-
-        if args.interface_stats:
-            await diag.collect_data(phase="end")
-            diag.compute_stats_diff()
-            stats = diag.export_stats_rooted()
-        else:
-            stats = {}
-
         run_result.update({
             "frame_size": st.frame_size,
             "tx_pps_req": st.pps_req,
@@ -445,35 +431,12 @@ if __name__ == "__main__":
     parser.add_argument("--csvfile", type=str, default="trex_results.csv")
     parser.add_argument('--no-priming', action='store_true',
                         help='Disable priming', default=False)
-    parser.add_argument('--interface-stats', action='store_true',
-                        help='Collect interface diagnostics before and after each run', default=False)
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--pps", type=str, action='append', default=None, help="Packets per second")
     group.add_argument("--throughput", "--tp", type=str,
                        default=None,
                        help="Target throughput with optional units: G for Gbps, M for Mbps, or bps if no unit, e.g., 10G, 500M, 10. ")
 
-    # Two-pass parse: load --config first, then let CLI args override
-    pre_parser = argparse.ArgumentParser(add_help=False)
-    pre_parser.add_argument('--config', type=str, default=None,
-                            help='Path to YAML config file')
-    pre_args, _ = pre_parser.parse_known_args()
-
-    if pre_args.config:
-        with open(pre_args.config) as f:
-            config = yaml.safe_load(f) or {}
-        # Translate positive 'priming' to argparse's 'no_priming'
-        if 'priming' in config:
-            config['no-priming'] = not config.pop('priming')
-        # Validate config keys against known parser arguments
-        valid_keys = {a.dest for a in parser._actions} | {'config'}
-        unknown = {k for k in config if k.replace('-', '_') not in valid_keys}
-        if unknown:
-            parser.error(f"Unknown config file keys: {', '.join(sorted(unknown))}")
-        parser.set_defaults(**{k.replace('-', '_'): v for k, v in config.items()})
-
-    parser.add_argument('--config', type=str, default=None,
-                        help='Path to YAML config file')
     args = parser.parse_args()
     all_results = []  # To hold dicts per run
     if args.flows_end <= args.flows_start:
