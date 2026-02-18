@@ -46,3 +46,23 @@ networkctl status red
 	Link File: /run/systemd/network/10-netplan-red.link
        Network File: /run/systemd/network/10-netplan-red.network
                       └─/etc/systemd/network/10-netplan-red.network.d/10-neighbor.conf
+
+--- configure network dispatcher
+mkdir -p /etc/systemd/system/systemd-networkd-wait-online.service.d/ 
+
+tee /etc/systemd/system/systemd-networkd-wait-online.service.d/override.conf <<EOF
+[Service]
+ExecStart=
+ExecStart=/lib/systemd/systemd-networkd-wait-online --any -o routable -i eth0 -i red -i black --timeout=30
+EOF
+
+systemctl daemon-reload
+systemctl restart systemd-networkd-wait-online.service
+systemctl status systemd-networkd-wait-online.service
+
+
+--network dispatcher
+systemctl enable networkd-dispatcher
+systemctl start networkd-dispatcher
+mkdir -p /etc/networkd-dispatcher/routable.d
+vim /etc/networkd-dispatcher/routable.d/10-flow-steering
