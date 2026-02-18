@@ -439,21 +439,13 @@ def run_test_frame_sizes(args, pps):
             test_results = asyncio.run(run_tests(args, st))
             all_results_frame_size.extend(test_results)
 
-            write_json(args.csvfile, all_results_frame_size)
+            write_json(args.results_file, all_results_frame_size)
 
     return all_results_frame_size
 
-def write_json(csv_filename, all_results):
-
-    base, ext = os.path.splitext(csv_filename)
-    if ext.lower() == '.csv':
-        json_filename = base + '.json'
-    else:
-        json_filename = csv_filename + '.json'
-
-    # Dump JSON results to file
-    with open(json_filename, 'w') as f:
-        print(f"\nAll runs aggregated result as JSON: {json_filename}")
+def write_json(filename, all_results):
+    with open(filename, 'w') as f:
+        print(f"\nAll runs aggregated result as JSON: {filename}")
         json.dump(all_results, f, indent=2)
 
 class Def:
@@ -630,7 +622,8 @@ if __name__ == "__main__":
                         help="Specify frame size in bytes; can be used multiple times. Default is 1440 bytes L1 1518 - IPsec.")
     test.add_argument("--duration", type=int, default=30)
     test.add_argument("--runs", type=int, default=5)
-    test.add_argument("--csvfile", type=str, default="trex_results.csv")
+    test.add_argument("--results-file", type=str, default="trex_results.json",
+                        help="Results file name")
     test.add_argument('--priming', action=argparse.BooleanOptionalAction,
                         help='Enable/disable priming', default=True)
 
@@ -656,7 +649,11 @@ if __name__ == "__main__":
     early_args, _ = parser.parse_known_args()
 
     if early_args.config:
+        print(f"Using config: {early_args.config}")
         load_config(early_args.config, parser)
+    elif os.path.exists("u1.conf"):
+        print("Using config: u1.conf (auto-detected)")
+        load_config("u1.conf", parser)
 
     args = parser.parse_args()
 
@@ -681,6 +678,10 @@ if __name__ == "__main__":
                 c.disconnect()
         print(f"Reverse: {args.rev_src_ip} -> {args.rev_dst_ip} src-mac {args.rev_src_mac} dst-mac {args.rev_dst_mac}")
 
+    _, ext = os.path.splitext(args.results_file)
+    if ext.lower() != '.json':
+        print(f"Warning: --output '{args.results_file}' does not have .json extension")
+
     all_results = []  # To hold dicts per run
     if args.flows_end <= args.flows_start:
         args.flows_end = args.flows_start
@@ -696,4 +697,4 @@ if __name__ == "__main__":
             pps = parse_rate_value(ppss, "pps")
             test_results = run_test_frame_sizes(args, pps)
             all_results.extend(test_results)
-            write_json(args.csvfile, all_results)
+            write_json(args.results_file, all_results)
