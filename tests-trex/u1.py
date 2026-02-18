@@ -654,8 +654,8 @@ def gen_config(filepath, args, parser, stats_config=None):
 
 
 def load_config(filepath, parser):
-    """Load TOML config, validate keys, and set as parser defaults.
-    Returns the [stats] section (dict) separately, since it's not a CLI arg."""
+    """Load TOML config, validate keys.
+    Returns (config_dict, stats_config) — caller merges with CLI args."""
     # Build set of valid dest names
     valid_dests = set()
     for action in parser._actions:
@@ -678,8 +678,23 @@ def load_config(filepath, parser):
             sys.exit(1)
         config[dest_key] = val
 
-    parser.set_defaults(**config)
-    return stats_config
+    return config, stats_config
+
+
+def merge_config(args, file_config, parser):
+    """Merge file config into args. CLI values take priority over file values.
+    For append args (--pps, --frame-sizes), CLI replaces file, not appends."""
+    # Find the default value for each dest from the parser
+    defaults = {}
+    for action in parser._actions:
+        defaults[action.dest] = action.default
+
+    for key, file_val in file_config.items():
+        cli_val = getattr(args, key, None)
+        default_val = defaults.get(key)
+        # If CLI value is the same as the parser default, user didn't set it
+        if cli_val == default_val:
+            setattr(args, key, file_val)
 
 
 if __name__ == "__main__":
@@ -750,18 +765,21 @@ if __name__ == "__main__":
     flow_grp.add_argument("--flows-start", "--flows", type=int, default=1, help="Number of UDP flows start")
     flow_grp.add_argument("--flows-end", type=int, default=1, help="Number of UDP flows end")
 
-    # Early parse to check for --config (needs to set defaults before full parse)
-    early_args, _ = parser.parse_known_args()
-
-    stats_config = {}
-    if early_args.config:
-        print(f"Using config: {early_args.config}")
-        stats_config = load_config(early_args.config, parser)
-    elif os.path.exists("u1.conf"):
-        print("Using config: u1.conf (auto-detected)")
-        stats_config = load_config("u1.conf", parser)
-
     args = parser.parse_args()
+
+    # Load config file and merge — CLI values take priority
+    file_config = {}
+    stats_config = {}
+    config_path = args.config
+    if config_path:
+        print(f"Using config: {config_path}")
+    elif os.path.exists("u1.conf"):
+        config_path = "u1.conf"
+        print("Using config: u1.conf (auto-detected)")
+
+    if config_path:
+        file_config, stats_config = load_config(config_path, parser)
+        merge_config(args, file_config, parser)
 
     if args.gen_config:
         gen_config(args.gen_config, args, parser, stats_config)
