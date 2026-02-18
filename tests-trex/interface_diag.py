@@ -15,8 +15,8 @@ class InterfaceDiagnostics:
         }
         self.host_map = host_map if host_map is not None else {
              'sunset': {'HostName': 'localhost', 'User': None},
-             'west': {'HostName': 'west.tatu.libreswan.org', 'User': 'root'},
-             'east': {'HostName': 'east.tatu.libreswan.org', 'User': 'root'},
+             'west': {'HostName': 'westa', 'User': 'root'},
+             'east': {'HostName': 'easta', 'User': 'root'},
         }
         self.commands = [
             (
@@ -31,6 +31,8 @@ class InterfaceDiagnostics:
         self.stats_start = {}  # host -> iface -> stats
         self.stats_end = {}    # host -> iface -> stats
         self.stats_diff = {}   # host -> iface -> diff
+        self.errors = []       # list of {host, interface, command, error}
+        self._seen_errors = set()
         self.verbose = True
 
     def parse_ethtool_stats(self, output):
@@ -157,41 +159,60 @@ class InterfaceDiagnostics:
                     parsers.append(parse_func)
 
         raw_results = await asyncio.gather(*tasks)
-        json_output = []
+        collect_results = []
         for meta, result, parse_func in zip(results, raw_results, parsers):
             entry = {**meta, **result}
-            if  entry['error'] or entry['exit_status'] != 0 or entry['stderr'] != '':
-                stats = parse_func(entry["stdout"])
-                print(f"AA Error add  entry['phase']")
-                if entry['phase'] == "start":
-                    self.set_stats(self.stats_start, entry['host'], entry['interface'], entry['error'], entry['stderr'], entry['exit_status'])
-                elif entry['phase'] == "end":
-                    self.set_stats(self.stats_end, entry['host'], entry['interface'], entry['error'], entry['stderr'], entry['exit_status'])
+            if entry['error'] or entry['exit_status'] != 0:
+                err = {
+                    "host": entry['host'],
+                    "interface": entry['interface'],
+                    "command": entry['command'],
+                    "ok": False,
+                    "error": entry['error'],
+                }
+                err_key = (entry['host'], entry['interface'], entry['command'])
+                if err_key not in self._seen_errors:
+                    self._seen_errors.add(err_key)
+                    self.errors.append(err)
+                    print(f"Warning: {entry['host']}:{entry['interface']} "
+                          f"`{entry['command']}` failed: {entry['error']}")
+                collect_results.append(err)
+                continue
+
+            stats = parse_func(entry["stdout"])
+            entry["stats"] = stats
+
+            if entry['phase'] == "start":
+                d = self.stats_start
+            elif entry['phase'] == "end":
+                d = self.stats_end
             else:
-                stats = parse_func(entry["stdout"])
-                entry["stats"] = stats
+                d = self.stats_start
 
-                # if parse_func == self.parse_ethtool_stats:
-                if entry['phase'] == "start":
-                    d = self.stats_start
-                elif entry['phase'] == "end":
-                    d = self.stats_end
-                key = entry['host']
-                if entry['host'] not in d:
-                    d[entry['host']] = {}
-                if entry['interface'] not in d[entry['host']]:
-                    d[entry['host']][entry['interface']] = []
+            if entry['host'] not in d:
+                d[entry['host']] = {}
+            if entry['interface'] not in d[entry['host']]:
+                d[entry['host']][entry['interface']] = []
 
-                d[entry['host']][entry['interface']].append(stats)
+            d[entry['host']][entry['interface']].append(stats)
+            collect_results.append({
+                "host": entry['host'],
+                "interface": entry['interface'],
+                "command": entry['command'],
+                "ok": True,
+            })
 
-        return json_output
+        return collect_results
 
     def export_stats_rooted(self):
-        return {
+        d = {
             "stats_start": self.stats_start,
             "stats_end": self.stats_end,
-            "stats_diff": self.stats_diff
+            "stats_diff": self.stats_diff,
         }
+        if self.errors:
+            d["errors"] = self.errors
+        return d
 
 # Usage Example:
 async def main():

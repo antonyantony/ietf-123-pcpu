@@ -1,5 +1,6 @@
 #!/root/venv/bin/python3.12
 import sys
+import os
 import json
 import csv
 import time
@@ -8,6 +9,13 @@ import asyncio
 import tomllib
 import subprocess
 from interface_diag import InterfaceDiagnostics
+
+# Hardcoded interface map (which interfaces to check per stats host)
+STATS_IFACES = {
+    'sun': ['redwest', 'redeast'],
+    'west': ['red', 'black'],
+    'east': ['red', 'black'],
+}
 
 sys.path.append('/var/tmp/trex-v3.08/automation/trex_control_plane/interactive')
 sys.path.append('/var/tmp/trex-v3.08/scripts')
@@ -197,7 +205,7 @@ def wait_for_priming(args, st):
         # Poll for up to 1 second (10 x 100ms)
         arrived = False
         for _ in range(10):
-            stats = c.get_stats()
+            stats = c.get_stats(ports=[0, 1])
             rx_fwd = stats[1].get("ipackets", 0) if use_fwd else expected
             rx_rev = stats[0].get("ipackets", 0) if use_rev else expected
             if rx_fwd >= expected and rx_rev >= expected:
@@ -208,7 +216,7 @@ def wait_for_priming(args, st):
         if not arrived:
             # Wait another second for stragglers
             time.sleep(1.0)
-            stats = c.get_stats()
+            stats = c.get_stats(ports=[0, 1])
 
         # Capture priming stats before clearing
         p0 = stats[0]
@@ -298,7 +306,7 @@ def run_test(args, st):
         else:
             runtime_deviation = 0   # or "within tolerance"
 
-        stats_ports = c.get_stats()
+        stats_ports = c.get_stats(ports=[0, 1])
         p0 = stats_ports[0]
         p1 = stats_ports[1]
 
@@ -353,7 +361,7 @@ def run_test(args, st):
             "runtime_deviation": runtime_deviation
         })
 
-        stats = c.get_stats()
+        stats = c.get_stats(ports=[0, 1])
         global_stats = stats.get('global', {})
         cpu_usage = global_stats.get('cpu_util', None)
 
@@ -382,8 +390,15 @@ def run_test(args, st):
 
     return result
 
-async def run_tests (args, st):
+async def run_tests (args, st, diag=None):
     all_runs_results = []  # To hold dicts per run
+
+    # Collect start stats
+    if diag:
+        try:
+            await diag.collect_data(phase="start")
+        except Exception as e:
+            print(f"Warning: stats start collection failed: {e}")
 
     # Run all test runs and collect results
     for run_id in range(1, args.runs + 1):
@@ -405,6 +420,14 @@ async def run_tests (args, st):
             "runs": args.runs,
             })
         all_runs_results.append(run_result)
+
+    # Collect end stats and compute diff
+    if diag:
+        try:
+            await diag.collect_data(phase="end")
+            diag.compute_stats_diff()
+        except Exception as e:
+            print(f"Warning: stats end collection failed: {e}")
 
     return all_runs_results
 
@@ -482,7 +505,7 @@ Assumptions:
             "Must be a number with optional G/M/K suffix."
         )
 
-def run_test_frame_sizes(args, pps):
+def run_test_frame_sizes(args, pps, diag=None):
     all_results_frame_size = []  # To hold dicts all frame sizes results
     for frame_size in args.frame_sizes: #loop over --frame-sizes array
 
@@ -497,7 +520,7 @@ def run_test_frame_sizes(args, pps):
 
             dir_str = " bidir" if args.bidir else (" rev" if args.rev else "")
             print(f"Setting flows {st.flows}/{args.flows_end} pps {st.pps:.2f}/{pps:.2f} per flow throughput {args.throughput} and frame-size {st.frame_size} runs {args.runs} duration {args.duration} sec{dir_str}")
-            test_results = asyncio.run(run_tests(args, st))
+            test_results = asyncio.run(run_tests(args, st, diag=diag))
             all_results_frame_size.extend(test_results)
 
             write_json(args.results_file, all_results_frame_size)
@@ -548,7 +571,7 @@ def arp_resolve_mac(ip):
     print(f"Warning: cannot resolve MAC for {ip}")
     return None
 
-def gen_config(filepath, args, parser):
+def gen_config(filepath, args, parser, stats_config=None):
     """Write current options (defaults + CLI overrides) as a commented TOML file.
     Iterates parser argument groups automatically — adding a new arg to a group
     is all that's needed."""
@@ -563,7 +586,7 @@ def gen_config(filepath, args, parser):
             return f'"{val}"'
         return str(val)
 
-    skip = {"config", "gen_config", "help"}
+    skip = {"config", "gen_config", "help", "check_stats"}
 
     # Collect dests that belong to mutually exclusive groups
     mutex_dests = set()
@@ -614,13 +637,25 @@ def gen_config(filepath, args, parser):
 
         lines.append("\n")
 
+    # Write [stats] section
+    if stats_config:
+        lines.append("# Stats collection hosts\n")
+        for name, cfg in stats_config.items():
+            lines.append(f"[stats.{name}]\n")
+            lines.append(f'host = "{cfg.get("host", name)}"\n')
+            user = cfg.get("user")
+            if user:
+                lines.append(f'user = "{user}"\n')
+            lines.append("\n")
+
     with open(filepath, "w") as f:
         f.writelines(lines)
     print(f"Config written to {filepath}")
 
 
 def load_config(filepath, parser):
-    """Load TOML config, validate keys, and set as parser defaults."""
+    """Load TOML config, validate keys, and set as parser defaults.
+    Returns the [stats] section (dict) separately, since it's not a CLI arg."""
     # Build set of valid dest names
     valid_dests = set()
     for action in parser._actions:
@@ -632,7 +667,11 @@ def load_config(filepath, parser):
 
     # Validate keys and convert dashes to underscores
     config = {}
+    stats_config = {}
     for key, val in raw_config.items():
+        if key == "stats":
+            stats_config = val
+            continue
         dest_key = key.replace("-", "_")
         if dest_key not in valid_dests:
             print(f"Error: unknown config key '{key}' in {filepath}")
@@ -640,6 +679,7 @@ def load_config(filepath, parser):
         config[dest_key] = val
 
     parser.set_defaults(**config)
+    return stats_config
 
 
 if __name__ == "__main__":
@@ -687,6 +727,10 @@ if __name__ == "__main__":
                         help="Results file name")
     test.add_argument('--priming', action=argparse.BooleanOptionalAction,
                         help='Enable/disable priming', default=True)
+    test.add_argument('--stats', action=argparse.BooleanOptionalAction,
+                        help='Enable/disable interface stats collection', default=True)
+    test.add_argument('--check-stats', action='store_true', default=False,
+                        help='Test stats collection (SSH + commands) and exit')
 
     dir_grp = parser.add_argument_group("Direction (mutually exclusive)")
     dir_mutex = dir_grp.add_mutually_exclusive_group()
@@ -709,18 +753,44 @@ if __name__ == "__main__":
     # Early parse to check for --config (needs to set defaults before full parse)
     early_args, _ = parser.parse_known_args()
 
+    stats_config = {}
     if early_args.config:
         print(f"Using config: {early_args.config}")
-        load_config(early_args.config, parser)
+        stats_config = load_config(early_args.config, parser)
     elif os.path.exists("u1.conf"):
         print("Using config: u1.conf (auto-detected)")
-        load_config("u1.conf", parser)
+        stats_config = load_config("u1.conf", parser)
 
     args = parser.parse_args()
 
     if args.gen_config:
-        gen_config(args.gen_config, args, parser)
+        gen_config(args.gen_config, args, parser, stats_config)
         sys.exit(0)
+
+    # Build stats host_map and hosts from TOML [stats] config
+    diag = None
+    if args.stats and stats_config:
+        host_map = {}
+        for name, cfg in stats_config.items():
+            host_map[name] = {
+                'HostName': cfg.get('host', name),
+                'User': cfg.get('user'),
+            }
+        hosts = {name: STATS_IFACES.get(name, []) for name in host_map}
+        diag = InterfaceDiagnostics(hosts=hosts, host_map=host_map)
+
+    if args.check_stats:
+        if not diag:
+            print("Error: no [stats] section in config file")
+            sys.exit(1)
+        results = asyncio.run(diag.collect_data(phase="check"))
+        all_ok = True
+        for r in results:
+            status = "ok" if r["ok"] else f"FAIL: {r.get('error', 'unknown')}"
+            print(f"  {r['host']}:{r['interface']} {r['command']} ... {status}")
+            if not r["ok"]:
+                all_ok = False
+        sys.exit(0 if all_ok else 1)
 
     args.use_rev = args.bidir or args.rev
     if args.use_rev:
@@ -756,6 +826,20 @@ if __name__ == "__main__":
 
         for ppss in args.pps: #loop over --pps array
             pps = parse_rate_value(ppss, "pps")
-            test_results = run_test_frame_sizes(args, pps)
+            test_results = run_test_frame_sizes(args, pps, diag=diag)
             all_results.extend(test_results)
-            write_json(args.results_file, all_results)
+    else:
+        pps = 0  # compute_pps will calculate from throughput per frame size
+        test_results = run_test_frame_sizes(args, pps, diag=diag)
+        all_results.extend(test_results)
+
+    # Include stats in results if collected
+    if diag and diag.stats_diff:
+        final_output = {
+            "results": all_results,
+            "interface_stats": diag.export_stats_rooted(),
+        }
+    else:
+        final_output = all_results
+
+    write_json(args.results_file, final_output)
