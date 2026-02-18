@@ -181,10 +181,69 @@ def run_priming(args, st, n=1, delay_ms=100):
     finally:
         c.disconnect()
 
+def wait_for_priming(args, st):
+    """Wait for priming packets to arrive at rx ports, then clear stats.
+    Returns priming stats dict. Max wait: 1s poll + 1s extra if nothing arrived."""
+    c = trex_connect(args.server)
+    try:
+        use_fwd = not args.rev
+        use_rev = args.use_rev
+
+        # Count expected priming packets per direction:
+        # run_priming called twice, first flow sent 2x, rest 1x each
+        pkts_per_call = st.flows + 1  # +1 for the first flow's extra send
+        expected = pkts_per_call * 2  # two run_priming calls
+
+        # Poll for up to 1 second (10 x 100ms)
+        arrived = False
+        for _ in range(10):
+            stats = c.get_stats()
+            rx_fwd = stats[1].get("ipackets", 0) if use_fwd else expected
+            rx_rev = stats[0].get("ipackets", 0) if use_rev else expected
+            if rx_fwd >= expected and rx_rev >= expected:
+                arrived = True
+                break
+            time.sleep(0.1)
+
+        if not arrived:
+            # Wait another second for stragglers
+            time.sleep(1.0)
+            stats = c.get_stats()
+
+        # Capture priming stats before clearing
+        p0 = stats[0]
+        p1 = stats[1]
+        priming_stats = {}
+        if use_fwd:
+            tx = p0.get("opackets", 0)
+            rx = p1.get("ipackets", 0)
+            priming_stats["priming_fwd_tx"] = tx
+            priming_stats["priming_fwd_rx"] = rx
+            priming_stats["priming_fwd_loss"] = tx - rx
+        if use_rev:
+            tx = p1.get("opackets", 0)
+            rx = p0.get("ipackets", 0)
+            priming_stats["priming_rev_tx"] = tx
+            priming_stats["priming_rev_rx"] = rx
+            priming_stats["priming_rev_loss"] = tx - rx
+
+        priming_stats["priming_arrived"] = arrived
+
+        lost = sum(v for k, v in priming_stats.items() if k.endswith("_loss"))
+        status = "ok" if arrived and lost == 0 else f"wait={'ok' if arrived else 'timeout'} loss={lost}"
+        print(f" priming: {status}", end="")
+
+        # Clear stats so test starts clean
+        c.clear_stats()
+    finally:
+        c.disconnect()
+
+    return priming_stats
+
 def run_priming_delay(args, st):
     run_priming(args, st, n=1, delay_ms=100)
-    # time.sleep(1)
     run_priming(args, st, n=1, delay_ms=100)
+    return wait_for_priming(args, st)
 
 def run_test(args, st):
     c = trex_connect(args.server)
@@ -329,9 +388,11 @@ async def run_tests (args, st):
     # Run all test runs and collect results
     for run_id in range(1, args.runs + 1):
         print(f" run {run_id}/{args.runs} ",  end="")
+        priming_stats = {}
         if args.priming:
-            run_priming_delay(args, st)
+            priming_stats = run_priming_delay(args, st)
         run_result = run_test(args, st)
+        run_result.update(priming_stats)
         run_result.update({
             "frame_size": st.frame_size,
             "tx_pps_req": st.pps_req,
