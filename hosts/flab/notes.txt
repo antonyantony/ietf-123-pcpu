@@ -1,3 +1,4 @@
+Adding permant mac addresses  using netplan + networkd
 networkctl status red
 ```
 Network File: /run/systemd/network/10-netplan-red.network
@@ -27,7 +28,8 @@ sudo networkctl reconfigure red
 
 ### 4️⃣ Verify
 
-ip neigh show dev red
+ip neigh show dev rednetworkctl status red
+
 192.0.2.252 lladdr 24:8a:07:5b:14:e0 PERMANENT
 
 ```bash
@@ -61,7 +63,7 @@ systemctl restart systemd-networkd-wait-online.service
 systemctl status systemd-networkd-wait-online.service
 
 
---network dispatcher
+--network dispatcher for flow steering
 systemctl enable networkd-dispatcher
 systemctl start networkd-dispatcher
 mkdir -p /etc/networkd-dispatcher/routable.d
