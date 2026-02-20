@@ -1,4 +1,4 @@
-#+TITLE: Linux kernel flowtable bulk forwarding path
+#+TITLE: Linux Kernel Flowtable Bulk Forwarding and XFRM pCPU Forwarding — Testing Results
 #+AUTHOR: Antony Antony
 #+DATE: October 10, 2025
 
@@ -6,12 +6,12 @@
 This is a short summary of testing done jointly with Pablo Neira Ayuso,
 Steffen Klassert, and Antony Antony. We are adding Linux kernel support
 for forwarding data path using Netfilter
-[[https://docs.kernel.org/networking/nf_flowtable.html][flowtable]] 
+[[https://docs.kernel.org/networking/nf_flowtable.html][flowtable]]
 for bulk forwarding, to improve forwarding data path performance, especially IPsec forwarding as IPsec gateway.
 
 * Flowtable Bulking Testing Results
 
-All tests here are using smaller ethernet frame sizes, i.e 128 bytes due limitiation of the system.  This is to show the scaling properties and later to be tested with 1518 byte frames.
+All tests here are using smaller ethernet frame sizes, i.e 128 bytes due limitation of the system.  This is to show the scaling properties and later to be tested with 1518 byte frames.
 
 ** Forwarding Tests (no IPsec)
 Test without IPsec. Frame size: 128 bytes.
@@ -42,14 +42,12 @@ using a flow table rule.
 #+caption: RX Gbps using single SA no bulk forwarding ESP Offload enabled, multiple flows
 [[file:tests-trex/results/20251016-ports/dst-ports-gbps.png]]
 
-Is the Hardware GRO  enabled? After enabling 
-[[file:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-enabled.txt][20251020-gro-black-enabled. txt]]. When system boots
+Is the Hardware GRO enabled? After enabling
+[[file:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-enabled.txt][20251020-gro-black-enabled.txt]]. When system boots
 [[filt:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-default.txt][20251020-gro-black-default.txt]]
 
-
 * Packets taking slow path.
-
-When flowtable with 5000  src port about  32K Packets take the slow path. That seems to be time necessary to create offload data path. 
+With 5000 source-port flows, ~32K packets traverse the slow path during the offload ramp-up period. These slow packets setup the nft offload path. And subsequent packets will take fast path. See the nft output bellow.
 
 #+CAPTION: Time to build slow path 5000 flows
 #+NAME: Flow offload
@@ -114,3 +112,5 @@ we encounter a kernel Oops (crash).
 [55769.370407] [  T58734]  </TASK>
 [55769.370411] [  T58734] Modules linked in:
 #+END_EXAMPLE
+
+The crash is still under investigation. This is a blocker to submit the xdptools patch. I slightly suspect Mellanox driver not handling CPUMAP.
