@@ -505,13 +505,67 @@ Assumptions:
             "Must be a number with optional G/M/K suffix."
         )
 
-def run_test_frame_sizes(args, pps, diag=None):
-    all_results_frame_size = []  # To hold dicts all frame sizes results
-    for frame_size in args.frame_sizes: #loop over --frame-sizes array
-
+def iter_frame_pps(args):
+    """Yield (frame_size, pps, label) for every frame-size × rate combination."""
+    frame_sizes = args.frame_sizes if args.frame_sizes else Def.frame_sizes
+    for frame_size in frame_sizes:
         if args.throughput:
-            pps = compute_pps(args, frame_size)
+            yield frame_size, compute_pps(args, frame_size), args.throughput
+        else:
+            for p in (args.pps if args.pps else Def.pps):
+                yield frame_size, parse_rate_value(p, "pps"), p
 
+
+def validate_test_plan(args):
+    """Validate all test parameter combinations before starting any tests.
+    Checks frame size minimums and L1 bandwidth against 100G line rate.
+    Exits with error if any combination is invalid."""
+    ip_ver = ipaddress.ip_address(args.src_ip).version
+    if ip_ver == 4:
+        min_frame = 42
+        min_desc = "Ethernet(14) + IP(20) + UDP(8)"
+    else:
+        min_frame = 62
+        min_desc = "Ethernet(14) + IPv6(40) + UDP(8)"
+
+    line_rate_bps = 100 * 10**9  # 100G
+    eth_overhead = 20  # preamble(7) + SFD(1) + IFG(12)
+    directions = 2 if args.bidir else 1
+    dir_note = " x2 (bidir)" if args.bidir else ""
+
+    errors = []
+    seen_frame_errors = set()
+
+    for frame_size, pps, label in iter_frame_pps(args):
+        if frame_size < min_frame:
+            if frame_size not in seen_frame_errors:
+                errors.append(
+                    f"frame_size {frame_size} too small: "
+                    f"minimum is {min_frame} bytes ({min_desc})"
+                )
+                seen_frame_errors.add(frame_size)
+            continue
+
+        l1_bps = pps * (frame_size + eth_overhead) * 8 * directions
+        l1_gbps = l1_bps / 1e9
+        if l1_bps > line_rate_bps:
+            errors.append(
+                f"frame_size {frame_size}, rate {label}: "
+                f"L1 {l1_gbps:.2f} Gbps{dir_note} exceeds 100 Gbps line rate"
+            )
+
+    if errors:
+        print("Validation failed:")
+        for e in errors:
+            print(f"  {e}")
+        return False
+    print("Validation OK")
+    return True
+
+
+def run_test_frame_sizes(args, diag=None):
+    all_results_frame_size = []  # To hold dicts all frame sizes results
+    for frame_size, pps, _ in iter_frame_pps(args):
         st = SimpleNamespace(pps=pps, pps_req = pps, frame_size=frame_size, flows=1, run=1)
 
         for flows in range(args.flows_start, args.flows_end + 1): # loop over flows
@@ -708,6 +762,8 @@ if __name__ == "__main__":
     parser.add_argument("--gen-config", type=str, nargs="?", const="u1.conf", default=None,
                         metavar="FILE",
                         help="Generate TOML config file from current options, then exit (default: u1.conf)")
+    parser.add_argument("--validate", action="store_true", default=False,
+                        help="Validate frame sizes and L1 bandwidth against 100G line rate, then exit")
 
     srv = parser.add_argument_group("TRex server")
     srv.add_argument("--server", type=str, default="127.0.0.1")
@@ -838,18 +894,15 @@ if __name__ == "__main__":
     if not args.frame_sizes :
         args.frame_sizes = d.frame_sizes
 
-    if not args.throughput:
-        if not args.pps:
-            args.pps = d.pps
+    if not args.throughput and not args.pps:
+        args.pps = d.pps
 
-        for ppss in args.pps: #loop over --pps array
-            pps = parse_rate_value(ppss, "pps")
-            test_results = run_test_frame_sizes(args, pps, diag=diag)
-            all_results.extend(test_results)
-    else:
-        pps = 0  # compute_pps will calculate from throughput per frame size
-        test_results = run_test_frame_sizes(args, pps, diag=diag)
-        all_results.extend(test_results)
+    if args.validate:
+        if not validate_test_plan(args):
+            sys.exit(1)
+
+    test_results = run_test_frame_sizes(args, diag=diag)
+    all_results.extend(test_results)
 
     # Include stats in results if collected
     if diag and diag.stats_diff:
