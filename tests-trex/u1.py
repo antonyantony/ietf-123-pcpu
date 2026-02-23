@@ -170,8 +170,8 @@ def run_priming(args, st, n=1, delay_ms=100):
             if use_rev:
                 # Reverse: port 1 → port 0
                 rev_pkt = create_pkt_udp(args.rev_src_mac, args.rev_dst_mac, args.rev_src_ip,
-                                 args.rev_dst_ip, st.frame_size, args.dst_port,
-                                 src_port)
+                                 args.rev_dst_ip, st.frame_size, src_port, args.dst_port)
+
                 rev_stream = STLStream(packet=rev_pkt, mode=STLTXSingleBurst(total_pkts=n))
                 c.add_streams([rev_stream], ports=[1])
 
