@@ -47,7 +47,7 @@ Is the Hardware GRO enabled? After enabling
 [[filt:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-default.txt][20251020-gro-black-default.txt]]
 
 * Packets taking slow path.
-With 5000 source-port flows, ~32K packets traverse the slow path during the offload ramp-up period. These slow packets setup the nft offload path. And subsequent packets will take fast path. See the nft output bellow.
+With 5000 source-port flows, ~32K packets traverse the slow path during the offload ramp-up period. These slow packets setup the nft offload path. And subsequent packets will take fast path. See the nft output below ([[Flow offload][nft ruleset]]).
 
 #+CAPTION: Time to build slow path 5000 flows
 #+NAME: Flow offload
