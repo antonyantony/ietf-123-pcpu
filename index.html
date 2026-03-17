@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Antony Antony" />
   <meta name="dcterms.date" content="2025-10-10" />
-  <title>Linux kernel flowtable bulk forwarding path</title>
+  <title>Linux Kernel Flowtable Bulk Forwarding and XFRM pCPU Forwarding — Testing Results</title>
   <style>
 html {
 color: #1a1a1a;
@@ -167,7 +167,8 @@ vertical-align: middle;
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Linux kernel flowtable bulk forwarding path</h1>
+<h1 class="title">Linux Kernel Flowtable Bulk Forwarding and XFRM pCPU
+Forwarding — Testing Results</h1>
 <p class="author">Antony Antony</p>
 <p class="date">October 10, 2025</p>
 </header>
@@ -195,8 +196,8 @@ especially IPsec forwarding as IPsec gateway.</p>
 <h1 id="flowtable-bulking-testing-results">Flowtable Bulking Testing
 Results</h1>
 <p>All tests here are using smaller ethernet frame sizes, i.e 128 bytes
-due limitiation of the system. This is to show the scaling properties
-and later to be tested with 1518 byte frames.</p>
+due limitation of the system. This is to show the scaling properties and
+later to be tested with 1518 byte frames.</p>
 <h2 id="forwarding-tests-no-ipsec">Forwarding Tests (no IPsec)</h2>
 <p>Test without IPsec. Frame size: 128 bytes.</p>
 <figure>
@@ -231,11 +232,14 @@ flows</figcaption>
 <figcaption>RX Gbps using single SA no bulk forwarding ESP Offload
 enabled, multiple flows</figcaption>
 </figure>
-<p>Is the Hardware GRO enabled? After enabling <a href="tests-trex/results/20251016-ports/gro-default/20251020-gro-black-enabled.txt">20251020-gro-black-enabled.
-txt</a>. When system boots <a href="filt:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-default.txt">20251020-gro-black-default.txt</a></p>
+<p>Is the Hardware GRO enabled? After enabling <a href="tests-trex/results/20251016-ports/gro-default/20251020-gro-black-enabled.txt">20251020-gro-black-enabled.txt</a>.
+When system boots <a href="filt:tests-trex/results/20251016-ports/gro-default/20251020-gro-black-default.txt">20251020-gro-black-default.txt</a></p>
 <h1 id="packets-taking-slow-path.">Packets taking slow path.</h1>
-<p>When flowtable with 5000 src port about 32K Packets take the slow
-path. That seems to be time necessary to create offload data path.</p>
+<p>With 5000 source-port flows, ~32K packets traverse the slow path
+during the offload ramp-up period. These slow packets setup the nft
+offload path. And subsequent packets will take fast path. See the nft
+output below (<span class="spurious-link" target="Flow offload"><em>nft
+ruleset</em></span>).</p>
 <pre id="Flow offload" class="example"><code>
 nft list ruleset
 table inet x {
@@ -291,5 +295,8 @@ hardware with Mellanox CX5 NIC, we encounter a kernel Oops (crash).</p>
 [55769.370407] [  T58734]  &lt;/TASK&gt;
 [55769.370411] [  T58734] Modules linked in:
 </code></pre>
+<p>The crash is still under investigation. This is a blocker to submit
+the xdptools patch. I slightly suspect Mellanox driver not handling
+CPUMAP.</p>
 </body>
 </html>
