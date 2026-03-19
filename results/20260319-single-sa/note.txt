@@ -1,0 +1,36 @@
+9000 MTU UDP test
+06:03:55.677864 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xcdfb55ce,seq=0xd6a4), length 8956
+06:03:55.677869 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xcdfb55ce,seq=0xd6a5), length 8956
+06:03:55.677876 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xcdfb55ce,seq=0xd6a6), length 8956
+
+NO ESP fragment
+Neither CPUs are 100%
+
+MTU 1500 UDP
+06:32:01.137179 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xcd9ae971,seq=0x10de0), length 1456
+06:32:01.137181 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xcd9ae971,seq=0x10de1), length 1456
+06:32:01.137183 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xcd9ae971,seq=0x10de2), length 1456
+06:32:01.137185 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xcd9ae971,seq=0x10de3), length 1456
+
+with tcp
+06:55:05.916940 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xc129b223,seq=0x23a), length 1480
+06:55:05.916945 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xc129b223,seq=0x23b), length 1480
+06:55:05.916937 IP 192.0.2.254.5201 > 192.0.1.254.55136: Flags [.], ack 3507262502, win 31043, options [nop,nop,TS val 3598111131 ecr 1625372311], length 0
+06:55:05.916948 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xc129b223,seq=0x23c), length 1480
+06:55:05.916952 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xc129b223,seq=0x23d), length 1480
+06:55:05.916955 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xc129b223,seq=0x23e), length 1480
+06:55:05.916957 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xc129b223,seq=0x23f), length 1480
+06:55:05.916960 IP 192.1.2.45 > 192.1.2.23: ESP(spi=0xc129b223,seq=0x240), length 1480
+
+
+Trex UDP 1500
+./u1.py --pps 0.27M --pps 0.28M  --pps 0.3M --pps 0.31M --pps 0.32M  --frame-size 1460 --duration 10 --results-file $SUBDIR/trex-1500.json
+
+07:14:42.153127 10:70:fd:87:53:30 > 10:70:fd:87:52:f0, ethertype IPv4 (0x0800), length 1514: 192.1.2.45 > 192.1.2.23: ESP(spi=0xca8130f4,seq=0x35e83), length 1480
+07:14:42.153129 10:70:fd:87:53:30 > 10:70:fd:87:52:f0, ethertype IPv4 (0x0800), length 1514: 192.1.2.45 > 192.1.2.23: ESP(spi=0xca8130f4,seq=0x35e84), length 1480
+07:14:42.153131 10:70:fd:87:53:30 > 10:70:fd:87:52:f0, ethertype IPv4 (0x0800), length 1514: 192.1.2.45 > 192.1.2.23: ESP(spi=0xca8130f4,seq=0x35e85), length 1480
+07:14:42.153136 10:70:fd:87:53:30 > 10:70:fd:87:52:f0, ethertype IPv4 (0x0800), length 1514: 192.1.2.45 > 192.1.2.23: ESP(spi=0xca8130f4,seq=0x35e86), length 1480
+07:14:42.153137 10:70:fd:87:53:30 > 10:70:fd:87:52:f0, ethertype IPv4 (0x0800), length 1514: 192.1.2.45 > 192.1.2.23: ESP(spi=0xca8130f4,seq=0x35e87), length 1480
+
+
+

@@ -216,6 +216,80 @@ def plot_multiple(files, x_key: Optional[str], y_key: Optional[str], title: str,
     print(f"[OK] Saved figure to {out_path}")
 
 
+def _bars_panel(ax, records, mode, file_label):
+    """Draw one best/average panel onto ax."""
+    import numpy as np
+
+    pps_vals = sorted(set(r["tx_pps_req"] for r in records))
+    x = np.arange(len(pps_vals))
+    bar_w = 0.35
+
+    tx_vals, rx_vals = [], []
+    for pps in pps_vals:
+        runs = [r for r in records if r["tx_pps_req"] == pps]
+        txs = [r["fwd_tx_throughput_gibps"] for r in runs]
+        rxs = [r["fwd_rx_throughput_gibps"] for r in runs]
+        if mode == "best":
+            best = int(max(range(len(txs)), key=lambda i: txs[i]))
+            tx_vals.append(txs[best])
+            rx_vals.append(rxs[best])
+        else:
+            tx_vals.append(sum(txs) / len(txs))
+            rx_vals.append(sum(rxs) / len(rxs))
+
+    ax.bar(x - bar_w / 2, tx_vals, bar_w, color="#1f77b4", label="TX")
+    ax.bar(x + bar_w / 2, rx_vals, bar_w, color="#aec7e8", label="RX")
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([f"{int(p/1000)}K" for p in pps_vals])
+    ax.set_xlabel("tx_pps_req")
+    ax.set_ylabel("Throughput (Gibps)")
+    ax.set_title(f"{file_label} — {mode.capitalize()}")
+    ax.legend(fontsize=8)
+    ax.grid(axis="y", linestyle="--", alpha=0.5)
+
+
+def plot_bars(files, title: str, out_path: Path) -> None:
+    """One PNG per file, each with best and average panels side by side."""
+    if not files:
+        raise SystemExit("No input files given.")
+
+    base = out_path.with_suffix("")
+
+    for fpath in files:
+        with open(fpath) as f:
+            records = json.load(f)
+
+        file_label = label_from_filename(Path(fpath))
+        fig, (ax_best, ax_avg) = plt.subplots(1, 2, figsize=(14, 6), sharey=True)
+        fig.suptitle(f"{title} — {file_label}", fontsize=13)
+
+        _bars_panel(ax_best, records, "best",    file_label)
+        _bars_panel(ax_avg,  records, "average", file_label)
+
+        # Print table
+        pps_vals = sorted(set(r["tx_pps_req"] for r in records))
+        hdr = f"{'pps_req':>8}  {'best_tx':>8} {'best_rx':>8}  {'avg_tx':>8} {'avg_rx':>8}  {'diff_tx':>8} {'diff_rx':>8}"
+        print(f"\n{file_label}")
+        print(hdr)
+        print("-" * len(hdr))
+        for pps in pps_vals:
+            runs = [r for r in records if r["tx_pps_req"] == pps]
+            txs = [r["fwd_tx_throughput_gibps"] for r in runs]
+            rxs = [r["fwd_rx_throughput_gibps"] for r in runs]
+            best = max(range(len(txs)), key=lambda i: txs[i])
+            btx, brx = txs[best], rxs[best]
+            atx = sum(txs) / len(txs)
+            arx = sum(rxs) / len(rxs)
+            print(f"{int(pps/1000):>7}K  {btx:>8.3f} {brx:>8.3f}  {atx:>8.3f} {arx:>8.3f}  {btx-atx:>+8.3f} {brx-arx:>+8.3f}")
+
+        fig.tight_layout()
+        out = out_path if len(files) == 1 else base.parent / f"{base.name}-{Path(fpath).stem}.png"
+        fig.savefig(out, dpi=150, bbox_inches="tight")
+        plt.close(fig)
+        print(f"[OK] Saved figure to {out}")
+
+
 def parse_args():
     p = argparse.ArgumentParser(description="Plot 4 TRex results on one chart.")
     p.add_argument( "--files", action="append", default=[],
@@ -228,11 +302,21 @@ def parse_args():
     p.add_argument("--y-label", default=None, help="Custom label for Y-axis. Defaults to --y-key.")
     p.add_argument("--title", default="Average Receive PPS vs Flows (4 variants)", help="Plot title.")
     p.add_argument("--out", default="pps-plot.png", help="Output PNG path.")
+    p.add_argument("--plot-bars", action="store_true",
+                   help="Bar chart: fwd_tx/rx_throughput_gibps per run for each tx_pps_req.")
     return p.parse_args()
 
 
 def main():
     args = parse_args()
+
+    if args.plot_bars:
+        plot_bars(
+            files=args.files,
+            title=args.title,
+            out_path=Path(args.out),
+        )
+        return
 
     # Default labels to keys if not provided
     x_label = args.x_label or args.x_key
